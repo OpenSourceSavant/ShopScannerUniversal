@@ -5,7 +5,7 @@ import { getDocs, query, collection, limit } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import { Link,router } from 'expo-router';
 
-const TopHomeCarousel = () => {
+const BottomHomeCarousel = () => {
   const [carouselImages, setCarouselImages] = useState([]);
   const deviceWidth = Dimensions.get('window').width;
 
@@ -34,7 +34,7 @@ const TopHomeCarousel = () => {
   };
 
   return (
-    <View style={{ height: deviceWidth * 0.6 }}>
+    <View style={{ height: deviceWidth * 0.6 ,marginTop:10}}>
       <SwiperFlatList
         autoplay
         autoplayDelay={3}
@@ -62,4 +62,4 @@ const TopHomeCarousel = () => {
   );
 };
 
-export default TopHomeCarousel;
+export default BottomHomeCarousel;

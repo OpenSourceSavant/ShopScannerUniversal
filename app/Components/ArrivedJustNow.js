@@ -62,7 +62,7 @@ const ArrivedJustNow = () => {
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 
     <Image
-        style={{ height: 270,width:190,objectFit:'contain',marginLeft:5 }}
+        style={{ height: 250,width:170,resizeMode:'contain',marginLeft:5 }}
         source={require('..//..//assets/sale.png')}
         />
 
@@ -71,24 +71,26 @@ const ArrivedJustNow = () => {
           key={deal.id}
           onPress={() => handleClick(deal.storeUrl)}
           style={{
-            width: 190,
-            height: 270,
+            width: 170,
+            height: 250,
             marginLeft: 10,
             padding: 0,
             flexShrink: 0,
             backgroundColor: '#fff', // Add background color
-            // Add other styles as needed
+            borderRadius: 6,
+            borderWidth: 1.5, // Add border width
+            borderColor: '#dfdfdf', // Add border color
           }}
         >
           {/* Top bar with store logo and favorite icon */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', position: 'relative', height: 25, marginTop: 5 }}>
             <Image
-              style={{ objectFit: 'contain', maxWidth: 75, height: 35 }}
+              style={{ resizeMode:'contain',width:50, maxWidth: 75, height: 35 }}
               source={{ uri: deal.store === 'flipkart' ? 'https://firebasestorage.googleapis.com/v0/b/deals-8b7c4.appspot.com/o/flipkart.png?alt=media&token=52e7412d-4560-4328-8c81-5b46bfcc7c38' : 'https://firebasestorage.googleapis.com/v0/b/deals-8b7c4.appspot.com/o/amazon-png-logo-vector-6695.png?alt=media&token=42ef349f-7b7c-4bf2-b259-c1d0d171eda5' }}
               
             />
 
-        <Text style={{ fontWeight: 'bold', fontSize: 12, textAlign: 'right' }}>{timeAgo(deal.dealTime)}</Text>
+        <Text style={{ fontWeight: '400', fontSize: 10, textAlign: 'right',marginRight:8 }}>{timeAgo(deal.dealTime)}</Text>
 
 
            
@@ -101,7 +103,7 @@ const ArrivedJustNow = () => {
             alt={deal.productTitle}
           />
 
-          <View style={{ justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+          <View style={{ justifyContent: 'space-between', padding: 10 }}>
             {/* Time ago */}
 
             {/* Product title */}
@@ -111,7 +113,7 @@ const ArrivedJustNow = () => {
               style={{
                 fontSize: 14,
                 lineHeight: 16,
-                fontWeight: 'bold',
+                fontWeight: 500,
                 marginTop: 5,
               }}
             >
@@ -119,12 +121,12 @@ const ArrivedJustNow = () => {
             </Text>
 
             {/* Discount percentage */}
-            <Text style={{ fontWeight: 'bold', marginRight: 10,color: '#FF0000' }}>{deal.discountPercentage}% Off</Text>
+            <Text style={{ fontWeight: 520, color: '#FF0000', textAlign: 'left',fontSize:19,marginTop:4 }}>{deal.discountPercentage}% Off</Text>
 
             {/* Deal price and MRP */}
-            <Text>
-              <Text style={{ fontWeight: 'bold', color: '#FF0000', fontSize: 18 }}>₹{parseInt(deal.dealPrice)}</Text>
-              <Text style={{ textDecorationLine: 'line-through', marginLeft: 16 }}>₹{parseInt(deal.mrp)}</Text>
+            <Text style={{marginTop:4}}>
+              <Text style={{ fontWeight: 'bold', color: '#FF0000', fontSize: 20 }}>₹{parseInt(deal.dealPrice)}</Text>
+              <Text style={{ textDecorationLine: 'line-through', marginLeft: 10,fontSize: 18 }}>₹{parseInt(deal.mrp)}</Text>
             </Text>
 
             {/* Deal container */}

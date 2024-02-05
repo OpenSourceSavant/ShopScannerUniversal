@@ -6,6 +6,7 @@ import amazonLogo from '..//..//assets/amazon_logo.png';
 import flipkartLogo from '..//..//assets/flipkart_logo.png';
 import { collection, getDocs, query, orderBy, limit,startAfter } from 'firebase/firestore';
 import { Appbar } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
 
 const DealsList = () => {
 
@@ -140,15 +141,33 @@ const handleScroll = ({ nativeEvent: { contentOffset: { y }, contentSize, layout
 
 
   const timeAgo = (firestoreTimestamp) => {
-    // Time ago logic
+    // Convert Firestore timestamp to JavaScript Date object
+    const dealDate = new Date(firestoreTimestamp.seconds * 1000);
+  
+    const now = new Date();
+    const differenceInSeconds = Math.round((now - dealDate) / 1000);
+    const minutes = Math.round(differenceInSeconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
+  
+    if (differenceInSeconds < 60) {
+      return `${differenceInSeconds} second${differenceInSeconds === 1 ? '' : 's'} ago`;
+  } else if (minutes < 60) {
+      return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+  } else if (hours < 24) {
+      return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  } else {
+      return `${days} day${days === 1 ? '' : 's'} ago`;
+  }
   };
 
 
   return (
 
     <View style={{flex:1}}>
-    <Appbar.Header style={{ height: 55,backgroundColor:'#fff' }}>
-    <Appbar.Content title="Shop Scanner" style={{}} />
+    <Appbar.Header style={{ backgroundColor: '#fff' }}>
+      <Appbar.Action icon={() => <Ionicons name="arrow-back" size={24} color="black" />}  />
+      <Appbar.Content title="Shop Scanner" style={{ flex: 1 }} />
     </Appbar.Header>
 
     <ScrollView style={{ flex: 1 }} onScroll={handleScroll} scrollEventThrottle={50}>
@@ -157,12 +176,12 @@ const handleScroll = ({ nativeEvent: { contentOffset: { y }, contentSize, layout
      
 
       {/* Deals Section */}
-      <View>
+      <View style={{flex:1,maxWidth:'100%'}}>
         {deals.map((deal) => (
           <TouchableOpacity
             key={deal.dealId}
             onPress={() => handleDealClick(deal.storeUrl)}
-            style={{ width: '100%', height: 150, marginBottom: 1 }}
+            style={{ width: '98%', height: 150, margin: 4 }}
           >
             <View
               style={{
@@ -184,9 +203,9 @@ const handleScroll = ({ nativeEvent: { contentOffset: { y }, contentSize, layout
                         : amazonLogo
                     }
                     style={{
-                      width: 30,
-                      height:10,
-                      objectFit: 'contain',
+                      width: 40,
+                      height:20,
+                      resizeMode: 'contain',
                     }}
                   />
                 </View>
@@ -205,7 +224,7 @@ const handleScroll = ({ nativeEvent: { contentOffset: { y }, contentSize, layout
 
               {/* Content for the second div */}
               <View style={{ width: '65%', backgroundColor: '#fff' }}>
-                <Text style={{ textAlign: 'right', fontSize: 12 }}>
+                <Text style={{ textAlign: 'right', fontSize: 12,marginBottom:10,fontFamily:'sans-serif',right:5 }}>
                   {timeAgo(deal.dealTime)}
                 </Text>
 
@@ -223,15 +242,15 @@ const handleScroll = ({ nativeEvent: { contentOffset: { y }, contentSize, layout
                   {deal.productTitle}
                 </Text>
 
-                <Text style={{ fontSize: 16, color: 'blue', marginBottom: 0 }}>
+                <Text style={{ fontSize: 19, color: 'blue', marginBottom: 5 }}>
                   ₹{deal.discountPercentage}% Off
                 </Text>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0 }}>
-                  <Text style={{ fontSize: 18, color: 'black' }}>
+                  <Text style={{ fontSize: 22, color: 'black' }}>
                     ₹{Math.round(deal.dealPrice)}
                   </Text>
-                  <Text style={{ textDecorationLine: 'line-through', color: 'gray', marginLeft: 5 }}>
+                  <Text style={{ textDecorationLine: 'line-through', color: 'gray', marginLeft: 5,fontSize: 18 }}>
                     ₹{deal.mrp}
                   </Text>
                 </View>
