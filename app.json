@@ -3,6 +3,7 @@
     "name": "ShopScannerUniversal",
     "slug": "ShopScannerUniversal",
     "version": "1.0.0",
+    "scheme": "shopscanneruniversal",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,10 +22,24 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shopscanner.wave"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2ff3cdc7-f57f-4cad-8c93-1d796083c770"
+      }
     }
   }
 }
