@@ -6,6 +6,7 @@ import round499 from '../../assets/round499.png';
 import round799 from '../../assets/round799.png';
 import round999 from '../../assets/round999.png';
 import round1999 from '../../assets/round1999.png';
+import { Link,router } from 'expo-router';
 
 const PriceCards = () => {
   
@@ -13,7 +14,9 @@ const PriceCards = () => {
 
   const handleCard2Press = (amount, previousAmount) => {
     console.log('amount', previousAmount);
-    navigation.navigate('DealsList', { type: 'amount', amount: amount, previousAmount: previousAmount });
+    //navigation.navigate('DealsList', { type: 'amount', amount: amount, previousAmount: previousAmount });
+    router.push('Screens/DealsList')
+
 
   };
 
@@ -34,6 +37,16 @@ const PriceCards = () => {
   };
 
   return (
+    <View style={{backgroundColor:'#f5f5f5'}}>
+          <Text style={{   fontFamily: 'Poppins-SemiBold',
+    fontSize: 24,
+    paddingTop:20,
+    paddingBottom:10,    
+    fontWeight: '700',
+    textAlign: 'left',
+    marginLeft:10  }}>
+    FILTER BY PRICE
+  </Text>
     <ScrollView
       horizontal={true}
       showsHorizontalScrollIndicator={false}
@@ -55,6 +68,7 @@ const PriceCards = () => {
         );
       })}
     </ScrollView>
+    </View>
   );
 };
 

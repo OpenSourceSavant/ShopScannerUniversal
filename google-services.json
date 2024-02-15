@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "986649847528",
+    "project_id": "smartsaver-ace3e",
+    "storage_bucket": "smartsaver-ace3e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986649847528:android:874242dc87bf2053d00b5d",
+        "android_client_info": {
+          "package_name": "com.shopscanner.dreamwave"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOUoYafolQOzlZ4gI4yEgdULGoT4EEaE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986649847528:android:8766c991cf33bf21d00b5d",
+        "android_client_info": {
+          "package_name": "com.shopscanner.wave"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOUoYafolQOzlZ4gI4yEgdULGoT4EEaE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

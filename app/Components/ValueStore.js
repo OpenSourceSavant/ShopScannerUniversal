@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Link, useNavigation } from 'expo-router';
+import { router } from 'expo-router';
 
 const ValueStore = () => {
-  const navigation = useNavigation();
 
   const handleLinkPress = (type, value) => {
-    navigation.navigate('DealsList', { type, value });
+    router.push('Screens/DealsList')
   };
 
   return (

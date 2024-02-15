@@ -33,14 +33,34 @@ const TopHomeCarousel = () => {
     router.push('Screens/DealsList')
   };
 
+  const renderPaginationItem = (item, index) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        style={{
+          width: 4,
+          height: 4,
+          margin: 3,
+          borderRadius: 4,
+          backgroundColor: index === 0 ? 'blue' : 'lightgray', // Customize the color here
+          
+        }}
+      />
+    );
+  };
+
   return (
     <View style={{ height: deviceWidth * 0.6 }}>
       <SwiperFlatList
         autoplay
-        autoplayDelay={3}
+        autoplayDelay={4}
         autoplayLoop
         index={0}
         showPagination
+        paginationStyleItem={{ width: 10, height: 6, borderRadius: 4, margin: 5 }} // Style object for the item (dot)
+        paginationStyleItemInactive={{ backgroundColor: 'lightgray',opacity:1 }} // Style object for the inactive item (dot)
+
+
       >
         {carouselImages.map((item, index) => (
           <TouchableOpacity key={index} onPress={() => handleCategoryClick(item.tags)}>
@@ -51,8 +71,9 @@ const TopHomeCarousel = () => {
               style={{
                 width: deviceWidth,
                 height: deviceWidth * 0.65,
-                resizeMode: 'contain',
               }}
+              resizeMode='contain'
+              
             />
           </View>
           </TouchableOpacity>

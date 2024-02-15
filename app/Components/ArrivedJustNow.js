@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity,ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity,ScrollView,Platform } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '..//..//firebaseConfig';
+import { Linking } from 'react-native';
 
 const ArrivedJustNow = () => {
   const [deals, setDeals] = useState([]);
@@ -46,23 +47,46 @@ const ArrivedJustNow = () => {
     }
   };
 
-  const isMobileWeb = () => {
-    const mobileWidthThreshold = 768; // Adjust as needed
-    return window.innerWidth < mobileWidthThreshold;
-  };
 
-  const handleClick = (url) => {
-    if (isMobileWeb()) {
-      // Handle click for mobile web
-      // Implement mobile-specific logic, like constructing deep links for mobile apps
+
+  const handleClick = async (url) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+  
+      if (supported) {
+        if (Platform.OS === 'ios') {
+          // For iOS, try opening the Amazon app
+          await Linking.openURL('amzn://app');
+        } else {
+          // For other platforms, open the URL and fallback to the browser
+          await Linking.openURL(url);
+        }
+      } else {
+        console.error(`Unable to open URL: ${url}`);
+      }
+    } catch (err) {
+      console.error('Error handling URL:', err);
     }
   };
 
   return (
+    <View style={{padding:10,backgroundColor:'#f5f5f5'}}>
+
+<Text style={{ 
+      fontFamily: 'Poppins-SemiBold',
+      fontSize: 24,
+      paddingTop:10,
+      paddingBottom:30,    
+      fontWeight: '700',
+      textAlign: 'left', 
+   }}>
+  ALL TIME SALE
+</Text>
+
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 
     <Image
-        style={{ height: 250,width:170,resizeMode:'contain',marginLeft:5 }}
+        style={{ height: 250,width:170,resizeMode:'contain',borderRadius: 6, }}
         source={require('..//..//assets/sale.png')}
         />
 
@@ -121,12 +145,13 @@ const ArrivedJustNow = () => {
             </Text>
 
             {/* Discount percentage */}
-            <Text style={{ fontWeight: 520, color: '#FF0000', textAlign: 'left',fontSize:19,marginTop:4 }}>{deal.discountPercentage}% Off</Text>
+            <Text style={{ fontWeight: '500', color: '#FF0000', textAlign: 'left',fontSize:18,marginTop:4 }}>{deal.discountPercentage}% Off</Text>
 
             {/* Deal price and MRP */}
             <Text style={{marginTop:4}}>
-              <Text style={{ fontWeight: 'bold', color: '#FF0000', fontSize: 20 }}>₹{parseInt(deal.dealPrice)}</Text>
-              <Text style={{ textDecorationLine: 'line-through', marginLeft: 10,fontSize: 18 }}>₹{parseInt(deal.mrp)}</Text>
+              <Text style={{ fontWeight: 'bold', color: '#FF0000', fontSize: 20,marginRight:19 }}>₹{parseInt(deal.dealPrice)}</Text>
+              {''}
+              <Text style={{ textDecorationLine: 'line-through',fontSize: 17}}>₹{parseInt(deal.mrp)}</Text>
             </Text>
 
             {/* Deal container */}
@@ -137,6 +162,7 @@ const ArrivedJustNow = () => {
         </TouchableOpacity>
       ))}
     </ScrollView>
+    </View>
   );
 };
 

@@ -1,12 +1,14 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet,Image } from 'react-native';
 import { TouchableOpacity, Text, ImageBackground } from 'react-native';
+import { router,useLocalSearchParams } from 'expo-router';
 
 const PercentageCardsList = () => {
   const percentages = [50, 60, 70, 80, 90];
+  const params = useLocalSearchParams();
 
   const handleCardPress = (percentage) => {
-    navigation.navigate('DealsList', { type: 'percentage', value: percentage });
+    router.push({ pathname: 'Screens/DealsList', params: { tags: percentage } });
   };
 
   const getImageForPercentage = (percentage) => {
@@ -25,6 +27,16 @@ const PercentageCardsList = () => {
   }
 
   return (
+    <View style={{padding:10,backgroundColor:'#f5f5f5'}}>
+      <Text style={{   fontFamily: 'Poppins-SemiBold',
+    fontSize: 24,
+    paddingTop:10,
+    paddingBottom:10,    
+    fontWeight: '700',
+    textAlign: 'left',
+    }}>
+    CHOOSE YOUR DISCOUNT
+  </Text>
     <ScrollView
       horizontal={true}
       showsHorizontalScrollIndicator={false}
@@ -42,6 +54,7 @@ const PercentageCardsList = () => {
         </View>
       ))}
     </ScrollView>
+    </View>
   );
 };
 
