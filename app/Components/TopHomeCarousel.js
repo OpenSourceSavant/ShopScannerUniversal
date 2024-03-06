@@ -28,9 +28,10 @@ const TopHomeCarousel = () => {
     fetchTopCarouselImages();
   }, []);
 
-  const handleCategoryClick = (tags) => {
-    console.log('Category clicked with tags:', tags);
-    router.push('Screens/DealsList')
+  const handleCarouselClick = (Tags) => {
+    console.log('Carousel clicked with tags:', Tags);
+    router.push({ pathname: 'Screens/DealsList', params: { tags: Tags } })    
+
   };
 
   const renderPaginationItem = (item, index) => {
@@ -63,7 +64,7 @@ const TopHomeCarousel = () => {
 
       >
         {carouselImages.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => handleCategoryClick(item.tags)}>
+          <TouchableOpacity key={index} onPress={() => handleCarouselClick(item.Tags)}>
 
           <View key={index} style={{ width: deviceWidth, height: deviceWidth * 0.6 }}>
             <Image

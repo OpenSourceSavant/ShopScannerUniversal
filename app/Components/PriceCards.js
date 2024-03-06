@@ -12,12 +12,9 @@ const PriceCards = () => {
   
   const amounts = [299, 499, 799, 999, 1999];
 
-  const handleCard2Press = (amount, previousAmount) => {
-    console.log('amount', previousAmount);
-    //navigation.navigate('DealsList', { type: 'amount', amount: amount, previousAmount: previousAmount });
-    router.push('Screens/DealsList')
-
-
+  const handleCard2Press = (amount) => {
+    let tagString = 'under' + amount;
+    router.push({ pathname: 'Screens/DealsList', params: { tags: tagString } });
   };
 
   const getImageForAmount = (amount) => {
@@ -37,14 +34,17 @@ const PriceCards = () => {
   };
 
   return (
-    <View style={{backgroundColor:'#f5f5f5'}}>
-          <Text style={{   fontFamily: 'Poppins-SemiBold',
-    fontSize: 24,
-    paddingTop:20,
-    paddingBottom:10,    
-    fontWeight: '700',
-    textAlign: 'left',
-    marginLeft:10  }}>
+    <View style={{backgroundColor:'#f5f5f5',marginTop:10}}>
+          <Text style={{   
+            fontFamily: 'Poppins-SemiBold',
+            marginTop:10,
+            marginBottom:10,
+            fontSize: 16,
+            paddingBottom: 5,
+            fontWeight: '700',
+            textAlign: 'left',
+            marginLeft:10, 
+             }}>
     FILTER BY PRICE
   </Text>
     <ScrollView
@@ -53,10 +53,9 @@ const PriceCards = () => {
       contentContainerStyle={styles.container}
     >
       {amounts.map((amount, index) => {
-        const previousAmount = amounts[index - 1] || 0; // Get the next amount, or null if it's the last element
         return (
           <View key={index} style={styles.cardContainer}>
-            <TouchableOpacity onPress={() => handleCard2Press(amount, previousAmount)}>
+            <TouchableOpacity onPress={() => handleCard2Press(amount)}>
               <ImageBackground
                 source={getImageForAmount(amount)}
                 style={styles.imageBackground}
@@ -75,15 +74,15 @@ const PriceCards = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 16,
+    padding:5
   },
   cardContainer: {
     marginRight: 16,
   },
   imageBackground: {
-    width: 190,
-    height: 190,
-    borderRadius: 85, // Updated for a perfect circle
+    width: 180,
+    height: 180,
+    borderRadius: 75, // Updated for a perfect circle
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',

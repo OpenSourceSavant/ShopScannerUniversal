@@ -1,4 +1,4 @@
-rootProject.name = 'ShopScannerUniversal'
+rootProject.name = 'Shop Scanner'
 
 dependencyResolutionManagement {
   versionCatalogs {

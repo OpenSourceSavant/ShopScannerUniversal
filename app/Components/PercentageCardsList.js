@@ -8,7 +8,10 @@ const PercentageCardsList = () => {
   const params = useLocalSearchParams();
 
   const handleCardPress = (percentage) => {
-    router.push({ pathname: 'Screens/DealsList', params: { tags: percentage } });
+    let tagString = 'morethan' + percentage;
+  
+
+    router.push({ pathname: 'Screens/DealsList', params: { tags: tagString } });
   };
 
   const getImageForPercentage = (percentage) => {
@@ -27,13 +30,14 @@ const PercentageCardsList = () => {
   }
 
   return (
-    <View style={{padding:10,backgroundColor:'#f5f5f5'}}>
-      <Text style={{   fontFamily: 'Poppins-SemiBold',
-    fontSize: 24,
-    paddingTop:10,
-    paddingBottom:10,    
-    fontWeight: '700',
-    textAlign: 'left',
+    <View style={{marginTop:25}}>
+      <Text style={{    
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 16,
+        paddingBottom: 5,
+        fontWeight: '700',
+        textAlign: 'left',
+        marginLeft:10,
     }}>
     CHOOSE YOUR DISCOUNT
   </Text>
@@ -61,14 +65,14 @@ const PercentageCardsList = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 16,
+    margin:10
   },
   cardContainer: {
     marginRight: 16,
   },
   imageBackground: {
-    width: 130,
-    height: 130,
+    width: 140,
+    height: 140,
     borderRadius: 50,
     overflow: 'hidden',
     justifyContent: 'center',
@@ -76,8 +80,8 @@ const styles = StyleSheet.create({
   },
  
   image: {
-    width: 165,
-    height: 165,
+    width: 170,
+    height: 170,
   },
 });
 

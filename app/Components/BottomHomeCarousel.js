@@ -30,18 +30,18 @@ const BottomHomeCarousel = () => {
 
   const handleCategoryClick = (tags) => {
     console.log('Category clicked with tags:', tags);
-    router.push('Screens/DealsList')
+    router.push({ pathname: 'Screens/DealsList', params: { tags: tags } })    
   };
 
   return (
-    <View style={{padding:10,backgroundColor:'#f5f5f5' }}>
+    <View style={{ height: deviceWidth * 0.7,marginTop:20}}>
     <Text style={{   fontFamily: 'Poppins-SemiBold',
-    fontSize: 24,
-    paddingTop:10,
-    paddingBottom:20,    
-    fontWeight: '700',
-    textAlign: 'left', }}>
-    BEST OF STORES
+        fontSize: 16,
+        paddingBottom: 5,
+        fontWeight: '700',
+        textAlign: 'left',
+        marginLeft:10,
+        marginBottom:5 }}>
   </Text>
       <SwiperFlatList
         autoplay
@@ -49,23 +49,23 @@ const BottomHomeCarousel = () => {
         autoplayLoop
         index={0}
         showPagination
-        paginationStyleItem={{ width: 10, height: 6, borderRadius: 4, margin: 5 }} // Style object for the item (dot)
+        paginationStyleItem={{ width: 10, height: 6, borderRadius: 4, margin:5 }} // Style object for the item (dot)
         paginationStyleItemInactive={{ backgroundColor: 'lightgray',opacity:1 }} // Style object for the inactive item (dot)
 
         style={{height: deviceWidth * 0.67 }}
       >
         {carouselImages.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => handleCategoryClick(item.tags)}>
+          <TouchableOpacity key={index} onPress={() => handleCategoryClick(item.Tags)}>
 
           <View key={index} style={{ width: deviceWidth, height: deviceWidth * 0.67 }}>
             <Image
               source={{ uri: item.url }}
               style={{
                 width: deviceWidth,
-                height: deviceWidth * 0.67,
+                height: deviceWidth * 0.68,
                 
               }}
-              resizeMode='cover'
+              resizeMode='contain'
 
             />
           </View>

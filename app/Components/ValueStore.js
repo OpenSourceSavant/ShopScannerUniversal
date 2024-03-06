@@ -4,8 +4,8 @@ import { router } from 'expo-router';
 
 const ValueStore = () => {
 
-  const handleLinkPress = (type, value) => {
-    router.push('Screens/DealsList')
+  const handleLinkPress = (value) => {
+    router.push({ pathname: 'Screens/DealsList', params: { tags: value } });
   };
 
   return (
@@ -17,28 +17,28 @@ const ValueStore = () => {
       
       
       <View style={styles.gridContainer}>
-        <TouchableOpacity onPress={() => handleLinkPress('valuestore', 'MakeUp')} style={styles.gridItem}>
+        <TouchableOpacity onPress={() => handleLinkPress(['makeup','sunscreen', 'face serum', 'faceserum', 'serum', 'moisturizer','moituriser','hair care','hairwash','shampoo','hairserum','makeup'])} style={styles.gridItem}>
           <Image
             source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/ValueStore1.png?alt=media&token=568f28e8-3d8b-44f1-bee7-4e403094c42e' }}
             style={styles.image}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => handleLinkPress('valuestore', 'SkinCare')} style={[styles.gridItem, { marginTop: 20 }]}>
+        <TouchableOpacity onPress={() => handleLinkPress(['skincare'])} style={[styles.gridItem, { marginTop: 20 }]}>
           <Image
             source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/ValueStore2.png?alt=media&token=c86ce4e8-1d35-4b52-832b-1ea06dc59221' }}
             style={styles.image}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => handleLinkPress('valuestore', 'HairCare')} style={styles.gridItem}>
+        <TouchableOpacity onPress={() => handleLinkPress(['haircare','hairwash', 'shampoo', 'hairserum'])} style={styles.gridItem}>
           <Image
             source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/ValueStore3.png?alt=media&token=08185695-1a88-4665-9183-fae78973a425' }}
             style={styles.image}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => handleLinkPress('valuestore', 'Fragrances')} style={[styles.gridItem, { marginTop: 20 }]}>
+        <TouchableOpacity onPress={() => handleLinkPress(['fragranes','perfumes', 'perfume', 'fragrance', 'deo'])} style={[styles.gridItem, { marginTop: 20 }]}>
           <Image
             source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/ValueStore4.png?alt=media&token=aa76cfb2-88fa-4531-bfa8-b8c917003157' }}
             style={styles.image}
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%', // Adjust width as needed based on your design
-    height: 230,
+    height: 250,
     resizeMode:'contain'
     
   },

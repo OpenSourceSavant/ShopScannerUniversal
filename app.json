@@ -1,28 +1,30 @@
 {
   "expo": {
-    "name": "ShopScannerUniversal",
+    "name": "Shop Scanner",
     "slug": "ShopScannerUniversal",
-    "version": "1.2.0",
-    "scheme": "shopscanneruniversal",
+    "version": "3.1.0",
+    "scheme": "shopscanner",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app_icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash_screen_final.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/ic_launcher_foreground.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.shopscanner.wave",
-      "googleServicesFile": "./google-services.json" 
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -38,10 +40,10 @@
             "./assets/fonts/Poppins-Black.ttf",
             "./assets/fonts/Assistant-VariableFont_wght.ttf",
             "./assets/fonts/Poppins-SemiBold.ttf"
-            
           ]
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "extra": {
       "router": {
@@ -50,6 +52,8 @@
       "eas": {
         "projectId": "2ff3cdc7-f57f-4cad-8c93-1d796083c770"
       }
-    }
-  }
+    },
+    "entryPoint": ".vscode\\exponentIndex.js"
+  },
+  "name": "shopscanneruniversal"
 }

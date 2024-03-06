@@ -1,11 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Modal, TouchableOpacity, Image, Platform } from 'react-native';
+import { Modal, Image, Platform,View} from 'react-native';
 import HomeScreen from './Screens/HomeScreen';
-import Login from './Screens/Login';
 import AllCategories from './Screens/AllCategories';
 import NotificationScreen from './Screens/NotificationScreen';
-import { router, useNavigation } from 'expo-router';
+import { router, useNavigation ,useLocalSearchParams} from 'expo-router';
+import DealsList from './Screens/DealsListNew';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,8 +23,13 @@ const CustomTabIcon = ({ icon, color, size }) => {
   );
 };
 
-const MobileStack = () => {
+const MobileWebStack = () => {
   const [isNotificationModalVisible, setNotificationModalVisible] = React.useState(false);
+  const lastRoute = useLocalSearchParams().lastRoute;
+  const initialRouteSubCategory = useLocalSearchParams().initialRouteSubCategory;
+  console.log('lastRoute in Mobile Web Stack',lastRoute)
+  console.log('initialRouteSubCategory in Mobile Web Stack',initialRouteSubCategory)
+  const navigation = useNavigation(); // Add this line to get the navigation object
 
   const handleNotificationPress = () => {
     setNotificationModalVisible(true);
@@ -34,33 +39,22 @@ const MobileStack = () => {
     setNotificationModalVisible(false);
   };
 
+  const handleBackPress = () => {
+    router.replace({ pathname: 'Screens/HomeScreen' });
+
+  };
+
+  
+
   return (
     <>
       <Tab.Navigator
+      initialRouteName={lastRoute}
         screenOptions={{
-          headerTitleAlign: 'center',
-          elevation:10,
-          headerTitleStyle: {
-            fontSize: 20,
-          },
-          headerLeft: () => (
-            <Image
-              source={require('..//assets/icon.png')} // replace with the actual path to your image
-              style={{
-                width: 64,
-                height: 64,
-                marginLeft: 16,
-                ...Platform.select({
-                  android: {
-                    elevation: 4, // for Android
-                  },
-                  web: {
-                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // for the web
-                  },
-                }),
-              }}
-            />
-          ),
+          tabBarActiveTintColor: '#e91e63',
+         
+          
+          
          /*
 headerRight: () => (
     <TouchableOpacity onPress={handleNotificationPress} style={{ marginRight: 16 }}>
@@ -84,35 +78,43 @@ headerRight: () => (
           component={HomeScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <CustomTabIcon icon={require('..//assets/home.png')} color={color} size={size} />
+              <CustomTabIcon icon={require('..//assets/homeicon.png')} color={color} size={size} />
             ),
-          }}
+            headerShown: false  
+                    }}
         />
 
-      <Tab.Screen
-        name="Categories"
-        component={AllCategories}
+        <Tab.Screen
+          name="Categories"
+          component={AllCategories}
+          initialParams={{ 'initialRouteSubCategory': initialRouteSubCategory,'lastRoute':lastRoute }}
+          options={({ navigation, route }) => ({
+            tabBarIcon: ({ color, size }) => (
+              <CustomTabIcon icon={require('..//assets/category.png')} color={color} size={size} />
+            ),
+            headerShown: false,
+            // Pass the parameters to the screen
+          })}
+        />
+
+<Tab.Screen
+        name="All Deals"
+        component={DealsList}
         options={({ navigation }) => ({
-          headerLeft: () => (
-            <TouchableOpacity >
-              {/* Replace the below Image component with your desired icon */}
-              <Image
-                source={require('..//assets/left-arrow.png')}
-                style={{ width: 24, height: 24, marginLeft: 15 }}
-              />
-            </TouchableOpacity>
-          ),
+        
           tabBarIcon: ({ color, size }) => (
-            <CustomTabIcon icon={require('..//assets/category.png')} color={color} size={size} />
+            <CustomTabIcon icon={require('..//assets/all_icon.png')} color={color} size={size} />
           ),
+          headerShown: false  
+
         })}
       />
 
 
-       
+     {/*  
     <Tab.Screen
           name="Profile"
-          component={Login}
+          component={Profile}
           options={{
             tabBarIcon: ({ color, size }) => (
               <CustomTabIcon icon={require('..//assets/user.png')} color={color} size={size} />
@@ -120,7 +122,7 @@ headerRight: () => (
             headerShown: false,
           }}
         />
-
+        */}
       </Tab.Navigator>
 
       {/* Notification Modal */}
@@ -132,8 +134,9 @@ headerRight: () => (
       >
         <NotificationScreen closeModal={closeModal} />
       </Modal>
+
     </>
   );
 };
 
-export default MobileStack;
+export default MobileWebStack;

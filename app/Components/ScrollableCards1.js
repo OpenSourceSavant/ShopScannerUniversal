@@ -11,9 +11,9 @@ const ScrollableCards1 = ({ cardsData }) => {
 
 
 
-  const handleCardClick = () => {
+  const handleCardClick = (tags) => {
     //console.log('Category clicked with tags:', tags);
-    router.push('Screens/DealsList')
+    router.push({ pathname: 'Screens/DealsList', params: { tags: tags } });
   };
 
 
@@ -31,7 +31,7 @@ const ScrollableCards1 = ({ cardsData }) => {
       showsHorizontalScrollIndicator={false}
     >
       {cardsData.map((card, index) => (
-        <Card key={index} style={{ marginRight: 16 }} onPress={() => handleCardClick()}>
+        <Card key={index} style={{ marginRight: 16 }} onPress={() => handleCardClick(card.tags)}>
           <Card.Cover source={{ uri: card.image }} style={{ height: 150,width:170, borderRadius: 8,resizeMode:'contain' }} />
        
         </Card>

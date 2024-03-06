@@ -1,78 +1,136 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Link, useRouter } from 'expo-router';
-import { Text,Pressable } from 'react-native';
+import { Modal, Image, Platform,View} from 'react-native';
 import HomeScreen from './Screens/HomeScreen';
-import Login from './Screens/Login';
 import AllCategories from './Screens/AllCategories';
-
-import { Ionicons } from '@expo/vector-icons';
-import DealsList from './Screens/DealsList';
+import NotificationScreen from './Screens/NotificationScreen';
+import { router, useNavigation } from 'expo-router';
+import DealsList from './Screens/DealsListNew';
 
 const Tab = createBottomTabNavigator();
 
+// CustomTabIcon component for rendering custom icons
+const CustomTabIcon = ({ icon, color, size }) => {
+  return (
+    <Image
+      source={icon}
+      style={{
+        width: size,
+        height: size,
+        tintColor: color,
+      }}
+    />
+  );
+};
 
-
-const ProfileScreen = () => (
-  <Pressable onPress={handleLogout}>
-    <Text>Logout</Text>
-  </Pressable>
-);
-
-const handleLogout = () => {
-    router.replace('/login');
-  };
 const MobileStack = () => {
-  const router = useRouter();
+  const [isNotificationModalVisible, setNotificationModalVisible] = React.useState(false);
+  
+  const navigation = useNavigation(); // Add this line to get the navigation object
 
+  const handleNotificationPress = () => {
+    setNotificationModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setNotificationModalVisible(false);
+  };
+
+  const handleBackPress = () => {
+    router.replace({ pathname: 'Screens/HomeScreen' });
+
+  };
+
+  
 
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
+    <>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: '#e91e63',
+         
+          
+          
+         /*
+headerRight: () => (
+    <TouchableOpacity onPress={handleNotificationPress} style={{ marginRight: 16 }}>
+        <Image
+            source={require('..//assets/notification.png')} // replace with the actual path to your image
+            style={{
+                width: 32,
+                height: 32,
+                marginRight: 10
+            }}
+        />
+    </TouchableOpacity>
+),
+*/
+
+          headerTitle: '', // Set an empty string to hide the title
+        }}
+      >
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <CustomTabIcon icon={require('..//assets/homeicon.png')} color={color} size={size} />
+            ),
+            headerShown: false  
+                    }}
+        />
+
+        <Tab.Screen
+          name="Categories"
+          component={AllCategories}
+          options={({ navigation }) => ({
+          
+            tabBarIcon: ({ color, size }) => (
+              <CustomTabIcon icon={require('..//assets/category.png')} color={color} size={size} />
+            ),
+            headerShown: false  
+
+          })}
+        />
+
+<Tab.Screen
+        name="All Deals"
         component={DealsList}
-        options={{
+        options={({ navigation }) => ({
+        
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <CustomTabIcon icon={require('..//assets/all_icon.png')} color={color} size={size} />
           ),
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="Categories"
-        component={AllCategories}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list-outline" size={size} color={color} />
-          ),
-        }}
+          headerShown: false  
+
+        })}
       />
 
-      <Tab.Screen
-        name="DealsList"
-        component={DealsList}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
-          ),
-          headerShown: true,
 
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Login}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
-          ),
-          headerShown: false,
+     {/*  
+    <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <CustomTabIcon icon={require('..//assets/user.png')} color={color} size={size} />
+            ),
+            headerShown: false,
+          }}
+        />
+        */}
+      </Tab.Navigator>
 
-        }}
-      />
-    
-
-    </Tab.Navigator>
+      {/* Notification Modal */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={isNotificationModalVisible}
+        onRequestClose={closeModal}
+      >
+        <NotificationScreen closeModal={closeModal} />
+      </Modal>
+    </>
   );
 };
 

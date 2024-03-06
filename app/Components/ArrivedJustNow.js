@@ -5,8 +5,23 @@ import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '..//..//firebaseConfig';
 import { Linking } from 'react-native';
 
+import FlipkartLogo from '..//..//assets/flipkart_logo.png';
+import AmazonLogo from '..//..//assets/amazon_logo.png';
+import MyntraLogo from '..//..//assets/myntra_logo.png';
+import NykaaLogo from '..//..//assets/nykaa_logo.png';
+import AjioLogo from '..//..//assets/ajio_logo.png';
+
 const ArrivedJustNow = () => {
   const [deals, setDeals] = useState([]);
+
+  const storeImages = {
+    flipkart: FlipkartLogo,
+    amazon: AmazonLogo,
+    myntra:MyntraLogo,
+    nykaa:NykaaLogo,
+    ajio:AjioLogo
+    // Add more stores if needed
+  };
 
   useEffect(() => {
     const fetchDeals = async () => {
@@ -73,12 +88,13 @@ const ArrivedJustNow = () => {
     <View style={{padding:10,backgroundColor:'#f5f5f5'}}>
 
 <Text style={{ 
-      fontFamily: 'Poppins-SemiBold',
-      fontSize: 24,
-      paddingTop:10,
-      paddingBottom:30,    
-      fontWeight: '700',
-      textAlign: 'left', 
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 16,
+        paddingBottom: 5,
+        fontWeight: '700',
+        textAlign: 'left',
+        marginLeft:5,
+        marginBottom:10
    }}>
   ALL TIME SALE
 </Text>
@@ -86,7 +102,7 @@ const ArrivedJustNow = () => {
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 
     <Image
-        style={{ height: 250,width:170,resizeMode:'contain',borderRadius: 6, }}
+        style={{ height: 270,width:185,resizeMode:'contain',borderRadius: 6, }}
         source={require('..//..//assets/sale.png')}
         />
 
@@ -95,14 +111,14 @@ const ArrivedJustNow = () => {
           key={deal.id}
           onPress={() => handleClick(deal.storeUrl)}
           style={{
-            width: 170,
-            height: 250,
+            width: 185,
+            height: 270,
             marginLeft: 10,
-            padding: 0,
+            padding: 5,
             flexShrink: 0,
             backgroundColor: '#fff', // Add background color
             borderRadius: 6,
-            borderWidth: 1.5, // Add border width
+            borderWidth: 0.9, // Add border width
             borderColor: '#dfdfdf', // Add border color
           }}
         >
@@ -110,8 +126,7 @@ const ArrivedJustNow = () => {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', position: 'relative', height: 25, marginTop: 5 }}>
             <Image
               style={{ resizeMode:'contain',width:50, maxWidth: 75, height: 35 }}
-              source={{ uri: deal.store === 'flipkart' ? 'https://firebasestorage.googleapis.com/v0/b/deals-8b7c4.appspot.com/o/flipkart.png?alt=media&token=52e7412d-4560-4328-8c81-5b46bfcc7c38' : 'https://firebasestorage.googleapis.com/v0/b/deals-8b7c4.appspot.com/o/amazon-png-logo-vector-6695.png?alt=media&token=42ef349f-7b7c-4bf2-b259-c1d0d171eda5' }}
-              
+              source={storeImages[deal.store]}              
             />
 
         <Text style={{ fontWeight: '400', fontSize: 10, textAlign: 'right',marginRight:8 }}>{timeAgo(deal.dealTime)}</Text>
@@ -122,7 +137,7 @@ const ArrivedJustNow = () => {
 
           {/* Deal image and details */}
           <Image
-            style={{ height: 100, resizeMode: 'contain' }}
+            style={{ height: 100, resizeMode: 'contain',marginTop:10 }}
             source={{ uri: deal.imageUrl }}
             alt={deal.productTitle}
           />
@@ -149,7 +164,7 @@ const ArrivedJustNow = () => {
 
             {/* Deal price and MRP */}
             <Text style={{marginTop:4}}>
-              <Text style={{ fontWeight: 'bold', color: '#FF0000', fontSize: 20,marginRight:19 }}>₹{parseInt(deal.dealPrice)}</Text>
+              <Text style={{ fontWeight: '500', color: '#FF0000', fontSize: 20,marginRight:10 }}>₹{parseInt(deal.dealPrice)}</Text>
               {''}
               <Text style={{ textDecorationLine: 'line-through',fontSize: 17}}>₹{parseInt(deal.mrp)}</Text>
             </Text>
