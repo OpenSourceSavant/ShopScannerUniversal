@@ -4,7 +4,7 @@ import { router, useNavigation } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const categories = [
-  { id: '2', name: 'Hot', image: require('..//..//assets/hot.png'), tags: ['morethan60'] },
+  { id: '2', name: 'Hot', image: require('..//..//assets/hot.png'), "tags": ["morethan60"] },
   { id: '1', name: 'Latest', image: require('..//..//assets/latest.png'), tags: null },
 
   { id: '8', name: 'Beauty', image: require('..//..//assets/beauty.png'), "tags": [

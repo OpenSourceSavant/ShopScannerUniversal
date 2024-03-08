@@ -7,7 +7,7 @@ import { track } from '@amplitude/analytics-react-native';
 
 import MobileStack from './MobileStack';
 import MobileWebStack from './MobileWebStack';
-import DesktopStack from './DesktopStack';
+import DesktopHomeScreen from './DesktopHomeScreen';
 
 
 const isWebMobile = Platform.OS === 'web' && Dimensions.get('window').width <= 786;
@@ -35,7 +35,7 @@ const HomePage = () => {
         <View style={{ flex: 1 }}>
           {isWebMobile && <MobileWebStack />}
           {isMobile && <MobileStack />}
-          {isDesktop && <DesktopStack />}
+          {isDesktop && <DesktopHomeScreen />}
         </View>
       </SafeAreaView>
     </PaperProvider>

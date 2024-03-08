@@ -7,7 +7,11 @@
   import flipkartLogo from '..//..//assets/flipkart_logo.png';
   import logo from '..//..//assets/icon.png'; // Replace with the correct path
   import { Linking } from 'react-native';
-
+  import FlipkartLogo from '..//..//assets/flipkart_logo.png';
+  import AmazonLogo from '..//..//assets/amazon_logo.png';
+  import MyntraLogo from '..//..//assets/myntra_logo.png';
+  import NykaaLogo from '..//..//assets/nykaa_logo.png';
+  import AjioLogo from '..//..//assets/ajio_logo.png';
 
   const DealsList = () => {
 
@@ -21,6 +25,15 @@
     const [selectedOption, setSelectedOption] = useState(null);
 
     const containerRef = useRef();
+
+    const storeImages = {
+      flipkart: FlipkartLogo,
+      amazon: AmazonLogo,
+      myntra:MyntraLogo,
+      nykaa:NykaaLogo,
+      ajio:AjioLogo
+      // Add more stores if needed
+    };
 
 
     // Check if tagsObject is a string and has values in params
@@ -179,12 +192,12 @@
           
           ) : (
             // Deals Section
-          <View style={{flex:1,maxWidth:'100%'}}>
+          <View style={{flex:1,maxWidth:'100%', margin: 7}}>
             {deals.map((deal) => (
               <TouchableOpacity
                 key={deal.dealId}
                 onPress={() => handleDealClick(deal.storeUrl)}
-                style={{ width: '98%', height: 150, margin: 4,backgroundColor:'#fff' }}
+                style={{ width: '100%', height: 155,backgroundColor:'#fff',marginBottom:6 }}
               >
                 <View
                   style={{
@@ -198,39 +211,41 @@
                 >
                   {/* Content for the first div */}
                   <View style={{ width: '35%', flexDirection: 'column' }}>
-                    <View style={{ width: '100%', height: '10%', padding: 5 }}>
-                      <Image
-                        source={
-                          deal.store === 'flipkart'
-                            ? flipkartLogo
-                            : amazonLogo
-                        }
-                        style={{
-                          width: 40,
-                          height:20,
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </View>
-                    <View style={{ width: '100%', height: '90%', justifyContent: 'center', alignItems: 'center' }}>
+                   
+                    <View style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center',padding:10 }}>
                       <Image
                         source={{ uri: deal.imageUrl }}
                         style={{
-                            width:90,
-                            height:90,
-                            resizeMode: 'contain', // Add this line
-                            marginRight: 10,
-                            
-                        }}
+                          width:'100%',
+                          height:'100%',
+                          resizeMode: 'contain', // Add this line
+                          marginRight: 10,
+                          
+                      }}
                       />
                     </View>
                   </View>
 
                   {/* Content for the second div */}
-                  <View style={{ width: '65%', backgroundColor: '#fff' }}>
+                  <View style={{ width: '65%', backgroundColor: '#fff',  padding: 10 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',paddingBottom:10 }}>
+
                     <Text style={{ textAlign: 'right', fontSize: 12,marginBottom:10,fontFamily:'sans-serif',right:5 }}>
                       {timeAgo(deal.dealTime)}
                     </Text>
+
+                    <Image
+                        source={storeImages[deal.store]}
+                        style={{
+                          width: 40,
+                          height:13,
+                          resizeMode: 'contain',
+                          
+                        }}
+                      />
+
+                  </View>    
+                    
 
                     <Text 
                     numberOfLines={2}

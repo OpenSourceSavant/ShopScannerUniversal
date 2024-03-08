@@ -10,6 +10,10 @@ import AmazonLogo from '..//..//assets/amazon_logo.png';
 import MyntraLogo from '..//..//assets/myntra_logo.png';
 import NykaaLogo from '..//..//assets/nykaa_logo.png';
 import AjioLogo from '..//..//assets/ajio_logo.png';
+import ZivameLogo from '..//..//assets/zivame_logo.png';
+import TiraLogo from '..//..//assets/tira_logo.png';
+
+
 
 const ArrivedJustNow = () => {
   const [deals, setDeals] = useState([]);
@@ -19,7 +23,9 @@ const ArrivedJustNow = () => {
     amazon: AmazonLogo,
     myntra:MyntraLogo,
     nykaa:NykaaLogo,
-    ajio:AjioLogo
+    ajio:AjioLogo,
+    zivame:ZivameLogo,
+    tira:TiraLogo
     // Add more stores if needed
   };
 
@@ -66,6 +72,7 @@ const ArrivedJustNow = () => {
 
   const handleClick = async (url) => {
     try {
+      console.log(url)
       const supported = await Linking.canOpenURL(url);
   
       if (supported) {

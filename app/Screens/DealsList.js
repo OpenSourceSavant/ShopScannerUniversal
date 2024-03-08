@@ -17,6 +17,9 @@
   import MyntraLogo from '..//..//assets/myntra_logo.png';
   import NykaaLogo from '..//..//assets/nykaa_logo.png';
   import AjioLogo from '..//..//assets/ajio_logo.png';
+  import ZivameLogo from '..//..//assets/zivame_logo.png';
+  import TiraLogo from '..//..//assets/tira_logo.png';
+
 
 
   const DealsList = () => {
@@ -59,7 +62,10 @@
       amazon: AmazonLogo,
       myntra:MyntraLogo,
       nykaa:NykaaLogo,
-      ajio:AjioLogo
+      ajio:AjioLogo,
+      zivame:ZivameLogo,
+      tira:TiraLogo
+
       // Add more stores if needed
     };
 
@@ -315,12 +321,12 @@
                   </View>
                 ) : (
                   // Deals Section
-                <View style={{flex:1,maxWidth:'100%', margin: 9}}>
+                <View style={{flex:1,maxWidth:'100%', margin: 7}}>
                   {deals.map((deal) => (
                     <TouchableOpacity
                       key={deal.dealId}
                       onPress={() => handleDealClick(deal.storeUrl)}
-                      style={{ width: '100%', height: 170,backgroundColor:'#fff',marginBottom:9 }}
+                      style={{ width: '100%', height: 155,backgroundColor:'#fff',marginBottom:6 }}
                     >
                       <View
                         style={{
