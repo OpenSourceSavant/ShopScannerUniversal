@@ -16,7 +16,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shopscanner.wave",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "We use tracking data to provide you personalized deal."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -43,7 +47,13 @@
           ]
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized deals to you."
+        }
+      ]
     ],
     "extra": {
       "router": {
