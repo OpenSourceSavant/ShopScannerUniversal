@@ -2,7 +2,7 @@
   "expo": {
     "name": "Shop Scanner",
     "slug": "ShopScannerUniversal",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "scheme": "shopscanner",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
@@ -19,7 +19,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.shopscanner.wave",
       "infoPlist": {
-        "NSUserTrackingUsageDescription": "We use tracking data to provide you personalized deal."
+        "NSUserTrackingUsageDescription": "We use tracking data to provide you best curated deals."
       }
     },
     "android": {
