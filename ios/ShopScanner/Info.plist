@@ -54,9 +54,10 @@
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
     <key>NSUserTrackingUsageDescription</key>
-    <string>This identifier will be used to deliver personalized deals to you.</string>
+    <string>This identifier will be used to deliver best curated deals for you.</string>
     <key>UIAppFonts</key>
     <array>
       <string>Poppins-Black.ttf</string>

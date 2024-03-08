@@ -51,7 +51,7 @@
       [
         "expo-tracking-transparency",
         {
-          "userTrackingPermission": "This identifier will be used to deliver personalized deals to you."
+          "userTrackingPermission": "This identifier will be used to deliver best curated deals for you."
         }
       ]
     ],
