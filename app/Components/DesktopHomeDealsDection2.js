@@ -56,7 +56,7 @@ const DesktopHomeDealsDection2 = () => {
   const DealCard = ({ deal }) => {
     return (
       <Card elevation={2} style={{ margin: 8, borderRadius: 16 }}>
-        <Card.Cover source={{ uri: deal.imageUrl }} style={{ height: 150 }} />
+        <Card.Cover source={{ uri: deal.imageUrl }} style={{ height: 180 }} />
         <Card.Content>
           <Title>{deal.productTitle}</Title>
           <Paragraph>
