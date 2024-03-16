@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Platform, Dimensions, SafeAreaView } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import * as Notifications from 'expo-notifications';
-import * as amplitude from '@amplitude/analytics-react-native';
-import { track } from '@amplitude/analytics-react-native';
 import { Application } from 'expo-application';
 import { collection, getDocs, query, orderBy, limit,addDoc } from 'firebase/firestore';
 import { db } from '..//firebaseConfig';
@@ -24,8 +22,7 @@ const HomePage = () => {
   }, []);
 
   const initializeAmplitude = () => {
-    amplitude.init('c1ed90ed03168877e05a8d1673295654');
-    track('App Open');
+   
     // Additional Amplitude initialization logic can be added here
   };
 
@@ -37,8 +34,11 @@ const HomePage = () => {
         const { requestTrackingPermissionsAsync } = await import('expo-tracking-transparency');
         const { status } = await requestTrackingPermissionsAsync();
         if (status === 'granted') {
-          initializeAmplitude(); // Enable Amplitude analytics after tracking permission is granted
-          // Additional logic after tracking permission is granted can be added here
+          const {amplitude} = await import ('@amplitude/analytics-react-native');
+          const { track } =await import('@amplitude/analytics-react-native');
+          amplitude.init('c1ed90ed03168877e05a8d1673295654');
+          track('App Open');
+       
         } else {
           // Tracking permission denied, handle accordingly
         }
@@ -47,16 +47,12 @@ const HomePage = () => {
       ////////////////////////ANDROID PART ////////////////////////////////////////
       else if (Platform.OS === 'android'){
         try {
-          initializeAmplitude();
-          // Import Firebase Analytics
-          const firebaseAnalyticsModule = await import('@react-native-firebase/analytics');
-          const analytics = firebaseAnalyticsModule.default(); // Get the default analytics instance
+          const {amplitude} = await import('@amplitude/analytics-react-native');
+          const { track } =await import('@amplitude/analytics-react-native');
+          amplitude.init('c1ed90ed03168877e05a8d1673295654');
+          track('App Open');
           
-          // Log "app_open" event
-          await analytics.logEvent('app_open');
-          
-          // Enable automatic event logging
-          await analytics.setAnalyticsCollectionEnabled(true);
+    
          
           const Notifications = await import('expo-notifications');
           const Device = await import('expo-device'); 
@@ -165,8 +161,10 @@ const HomePage = () => {
       }
       else {
         // For platforms other than iOS, automatically allow tracking
-        initializeAmplitude();
-        // Additional logic for other platforms can be added here
+          const {amplitude} = await import('@amplitude/analytics-react-native');
+          const { track } =await import('@amplitude/analytics-react-native');
+          amplitude.init('c1ed90ed03168877e05a8d1673295654');
+          track('App Open');
       }
     }
   };

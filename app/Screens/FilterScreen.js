@@ -51,7 +51,7 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 ,paddingTop:20}}>
       <View style={{ backgroundColor: '#fff', elevation: 3, height: 70, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 14 }}>FILTERS</Text>

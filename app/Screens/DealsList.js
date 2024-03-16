@@ -537,6 +537,7 @@
       position: 'absolute',
       top: 10,
       right: 20,
+      padding:10
     },
     closeButtonText: {
       fontSize: 28,
