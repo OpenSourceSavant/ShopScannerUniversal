@@ -2,7 +2,7 @@
   "expo": {
     "name": "Shop Scanner",
     "slug": "ShopScannerUniversal",
-    "version": "3.2.0",
+    "version": "3.6.0",
     "scheme": "shopscanner",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
@@ -16,7 +16,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.shopscanner.wave",
       "infoPlist": {
         "NSUserTrackingUsageDescription": "We use tracking data to provide you best curated deals."
@@ -47,7 +47,16 @@
           ]
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification_icon.png",
+          "color": "#ffffff"
+         
+        }
+      ]
+    
     ],
     "extra": {
       "router": {

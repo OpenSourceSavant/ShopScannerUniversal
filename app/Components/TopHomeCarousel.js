@@ -4,6 +4,7 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import { getDocs, query, collection, limit } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import { Link,router } from 'expo-router';
+import FastImage from 'react-native-fast-image'
 
 const TopHomeCarousel = () => {
   const [carouselImages, setCarouselImages] = useState([]);
@@ -67,13 +68,13 @@ const TopHomeCarousel = () => {
           <TouchableOpacity key={index} onPress={() => handleCarouselClick(item.Tags)}>
 
           <View key={index} style={{ width: deviceWidth, height: deviceWidth * 0.6 }}>
-            <Image
+            <FastImage
               source={{ uri: item.url }}
               style={{
                 width: deviceWidth,
                 height: deviceWidth * 0.65,
               }}
-              resizeMode='contain'
+              resizeMode={FastImage.resizeMode.contain}
               
             />
           </View>

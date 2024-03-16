@@ -167,14 +167,17 @@ const ArrivedJustNow = () => {
             </Text>
 
             {/* Discount percentage */}
-            <Text style={{ fontWeight: '500', color: '#FF0000', textAlign: 'left',fontSize:18,marginTop:4 }}>{deal.discountPercentage}% Off</Text>
+            <Text style={{ color: '#00BF15', fontWeight: '500', textAlign: 'left',fontSize:18,marginTop:4 }}>{deal.discountPercentage}% Off</Text>
 
             {/* Deal price and MRP */}
-            <Text style={{marginTop:4}}>
-              <Text style={{ fontWeight: '500', color: '#FF0000', fontSize: 20,marginRight:10 }}>₹{parseInt(deal.dealPrice)}</Text>
-              {''}
-              <Text style={{ textDecorationLine: 'line-through',fontSize: 17}}>₹{parseInt(deal.mrp)}</Text>
-            </Text>
+            <View style={{ marginTop: 4, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontWeight: '500', color: '#FF0000', fontSize: 20 }}>₹{parseInt(deal.dealPrice)}</Text>
+              <View style={{ marginHorizontal: 10 }}>
+                <Text style={{ textDecorationLine: 'line-through', fontSize: 17 }}>₹{parseInt(deal.mrp)}</Text>
+              </View>
+          </View>
+
+
 
             {/* Deal container */}
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

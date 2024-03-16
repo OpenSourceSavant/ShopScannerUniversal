@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, ImageBackground, StyleSheet,Platform } from 'react-native';
 import { router, useNavigation } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+
+const isAndroid = Platform.OS === 'android';
 
 const categories = [
   { id: '2', name: 'Hot', image: require('..//..//assets/hot.png'), "tags": ["morethan60"] },
@@ -201,6 +203,11 @@ const styles = StyleSheet.create({
     color: '#222',
     fontFamily: 'Poppins-SemiBold',
     textTransform: 'uppercase', // Corrected property
+    ...(isAndroid && {
+      // Add Android-specific styles here
+      fontWeight:"300",
+      color:'#36454F'
+    }),
   },
   title: {
     fontFamily: 'Poppins-SemiBold',

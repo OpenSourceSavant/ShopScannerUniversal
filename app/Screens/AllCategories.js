@@ -109,7 +109,7 @@ const AllCategories = ({route} ) => {
         { id: '502', name: 'Home Decor', image: require('..//..//assets/homedecor.png'), tags: ['homedecor',' home decor'] },
         { id: '503', name: 'Furnishing', image: require('..//..//assets/furnishing.png'), tags: ['furnishing'] },
         { id: '504', name: 'Appliances', image: require('..//..//assets/appliances.png'), tags: ['appliances', 'ac','tv','refrigerator','fridge'] },
-        { id: '504', name: 'Bathroom Accessories', image: require('..//..//assets/bathroom.png'), tags: ['bathroom','bathroom accessories','taps'] },
+        { id: '504', name: 'Bathroom Accessories', image: require('..//..//assets/bathroom.png'), tags: ['bathroom',' ','taps'] },
         { id: '504', name: 'Outdoor and Garden', image: require('..//..//assets/outdoor.png'), tags: ['outdoor', 'garden','outdoor and garden'] },
         { id: '504', name: 'DIY Tools', image: require('..//..//assets/diytools.png'), tags: ['diytools','diy tools'] },
 
