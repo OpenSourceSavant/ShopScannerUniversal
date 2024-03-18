@@ -2,7 +2,7 @@
   "expo": {
     "name": "Shop Scanner",
     "slug": "ShopScannerUniversal",
-    "version": "3.3.0",
+    "version": "3.6.0",
     "scheme": "shopscanner",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
@@ -16,8 +16,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.shopscanner.wave"
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shopscanner.wave",
+      "googleServicesFile":"./GoogleService-Info.plist"
      
     },
     "android": {
@@ -35,6 +36,7 @@
     },
     "plugins": [
       "expo-router",
+      "@react-native-firebase/app",
       [
         "expo-font",
         {
@@ -51,7 +53,15 @@
         {
           "userTrackingPermission": "This identifier will be used to deliver personalized deals for you."
         }
-      ]
+      ],
+      [
+      "expo-notifications",
+      {
+        "icon": "./assets/notification_icon.png",
+        "color": "#ffffff"
+       
+      }
+    ]
     ],
     "extra": {
       "router": {

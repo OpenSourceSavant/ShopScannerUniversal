@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>986649847528-q2sscnheb2abqvvmof2glscb0ho3b4je.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.986649847528-q2sscnheb2abqvvmof2glscb0ho3b4je</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAwpagc5YhtayxwjLzkofCpPJSsOY0JD-g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>986649847528</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.shopscanner.wave</string>
+	<key>PROJECT_ID</key>
+	<string>smartsaver-ace3e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>smartsaver-ace3e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:986649847528:ios:259a3c54944d6e11d00b5d</string>
+</dict>
+</plist>

@@ -21,7 +21,7 @@
   import TiraLogo from '..//..//assets/tira_logo.png';
   import VerifiedImage from '..//..//assets/verified.png';
   import downdiscount from '..//..//assets/downdiscount.png';
-  import FastImage from 'react-native-fast-image'
+  
   import { StatusBar } from 'expo-status-bar';
 
 
@@ -37,7 +37,7 @@
     const [initialFetchDone, setInitialFetchDone] = useState(false);
     const [selectedSortOption, setSelectedSortOption] = useState(null);
     const [sortOptionChanged, setSortOptionChanged] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [filterScreenVisible, setIsFilterScreenVisible] = useState(false);
     const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
     const [selectedDiscountOptions, setSelectedDiscountOptions] = useState([]);
@@ -45,13 +45,11 @@
     const [refreshing, setRefreshing] = useState(false);
 
     const navigation = useNavigation();
-    const windowHeight = Dimensions.get('window').height;
 
 
     const showBottomSheet = () => setBottomSheetVisible(true);
     const hideBottomSheet = () => {
       setBottomSheetVisible(false);
-      console.log("Hide Bottom Sheet Pressed")
     };
 
     const tagsObject = useLocalSearchParams().tags;
@@ -107,6 +105,7 @@
 
 
     const fetchDeals = async () => {
+      setIsLoading(true);
 
       try {
         let dealsQuery;
@@ -204,6 +203,7 @@
         console.error('Error fetching deals:', error);
         // Handle other errors (show an error message, set an error state, etc.)
       } finally {
+        setIsLoading(false);
       }
     };
 
@@ -265,7 +265,6 @@
     };
     
     const handleRefresh = () => {
-      setRefreshing(true);
     };
     
 
@@ -274,8 +273,6 @@
 
       if (!initialFetchDone || sortOptionChanged ||filterChanged ) {
         setLastVisible(null);
-        console.log('isLoading',isLoading)
-
         if(lastVisible==null)
           {
           console.log('fetch deals is running now Hurrayyy')
@@ -284,24 +281,15 @@
           setInitialFetchDone(true);
           setfilterChanged(false)
           }
-
-          setIsLoading(false);
-
-      }
-
-      else if(refreshing){
-        fetchDeals();
-        setRefreshing(false);
       }
   
        
-      }, [isMoreDataAvailable, selectedSortOption,sortOptionChanged,isLoading,lastVisible,filterChanged,selectedDiscountOptions,setDeals,setIsLoading,refreshing,setRefreshing]);
+      }, [isMoreDataAvailable, selectedSortOption,sortOptionChanged,isLoading,lastVisible,filterChanged,selectedDiscountOptions,setDeals]);
 
 
     return (
 
       <View style={{flex:1}}>
-        
         <StatusBar backgroundColor='#fff' />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', elevation: 3, height: 70 }}>
@@ -338,13 +326,10 @@
                         
                   
                 <View style={{ flex: 1 }}>
-                {deals.length==0? (
-                    <View style={{ flex: 1,justifyContent: 'center', alignItems: 'center',height:windowHeight-168 }}>
-                      <ActivityIndicator animating={true} color={'#d53b62'} />
-                <Text style={{ color: '#555555', fontSize: 16,paddingLeft:40,paddingRight:40,textAlign:'center',marginTop:40}}>Discover savings, Shop Scanner awaits you!</Text>
-                      
-                    </View>
-
+                  {deals.length === 0 ? (
+                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>No deals available</Text>
+                  </View>
                 ) : (
                   // Deals Section
                 <View style={{flex:1,maxWidth:'100%'}}>
@@ -352,13 +337,13 @@
                       <TouchableOpacity
                       key={deal.dealId}
                       onPress={() => handleDealClick(deal.storeUrl)}
-                      style={{ width: '100%', height: 160,backgroundColor:'#fff' }}
+                      style={{ width: '100%', height: 172,backgroundColor:'#fff' }}
                     >
                       <View
                         style={{
                           flexDirection: 'row',
                           height: '100%',
-                          borderTopWidth: 0.7, // Adjust the thickness as needed
+                          borderBottomWidth: 0.7, // Adjust the thickness as needed
                           borderColor: '#d3d3d3', // Light grey color
                           
                         }}
@@ -366,23 +351,22 @@
                         {/* Content for the first div */}
                         <View style={{ width: '35%', flexDirection: 'column',padding:10 }}>
           
-                               <FastImage
+                               <Image
                                  source={{ uri: deal.imageUrl }}
                                  style={{
                                      width:'100%',
                                      height:'100%',
-                                     
+                                     resizeMode: 'contain', // Add this line
                                     
                                      
                                  }}
-                                 resizeMode={FastImage.resizeMode.contain}
                                />
                         </View>
        
                         {/* Content for the second div */}
                         <View style={{ width: '65%', backgroundColor: '#fff',  padding: 3,paddingRight:10,paddingLeft:5 }}>
        
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',height:'20%',paddingLeft:5 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',height:'25%',paddingLeft:10 }}>
                          
                           <Text style={{ textAlign: 'right', fontSize: 12,  fontFamily: 'sans-serif' }}>
                             {timeAgo(deal.dealTime)}
@@ -398,40 +382,51 @@
                         }}
                       />
                         </View>
-                        <View style={{ height:'80%' }}>
+                        <View style={{ height: '65%', overflow: 'hidden' }}>
                           <Text
                             numberOfLines={2}
                             ellipsizeMode="tail"
                             style={{
-                              fontSize: 13,
+                              fontSize: 14,
                               fontWeight: '400',
                               marginBottom: 8,
                               lineHeight: 16,
                               overflow: 'hidden',
-                              marginLeft: 5,
+                              flex: 1, // Make the text take equal height
+                              marginLeft:5
                             }}
                           >
                             {deal.productTitle}
                           </Text>
-
-                          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                            <Text style={{ fontSize: 20, color: '#00BF15', fontWeight: '500', marginLeft: 5 }}>
-                              {deal.discountPercentage}% Off
+       
+                          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0, flex: 1 }}>
+                            <Image source={downdiscount} style={{ height: 22, width: 22 }} />
+                            <Text style={{ fontSize: 20, color: '#00BF15', fontWeight: '500', marginLeft: 10 }}>
+                              ₹{deal.discountPercentage}% Off
                             </Text>
                           </View>
-
-                          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, paddingLeft: 5 }}>
+       
+                          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0, flex: 1,paddingLeft:10 }}>
                             <Text style={{ fontSize: 22, color: 'black' }}>
                               ₹{Math.round(deal.dealPrice)}
                             </Text>
-                            <Text style={{ textDecorationLine: 'line-through', color: 'gray', marginLeft: 12, fontSize: 18 }}>
+                            <Text style={{ textDecorationLine: 'line-through', color: 'gray', marginLeft: 12, fontSize: 18, flex: 1 }}>
                               ₹{deal.mrp}
                             </Text>
                           </View>
                         </View>
-
        
-                     
+                        <View style={{ height: '10%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                            {/* Your other content goes here */}
+                            <Image
+                              source={VerifiedImage}
+                              style={{
+                                height: 10,
+                                width: 50, // Fixing the width since you had a typo in the original code (height: 13)
+                                resizeMode: 'center'
+                              }}
+                            />
+                          </View>
        
                         </View>
                       </View>
@@ -478,16 +473,12 @@
               <View style={styles.modalContainer}>
                 <View style={styles.bottomSheet}>
                   {/* Close Button */}
-                  <View style={{flexDirection:'row'}}>
-                
+                  <TouchableOpacity style={styles.closeButton} onPress={hideBottomSheet}>
+                    <Text style={styles.closeButtonText}>X</Text>
+                  </TouchableOpacity>
 
                   {/* Sort Options */}
                   <Text style={styles.title}>Sort Options</Text>
-
-                  <Button  onPress={hideBottomSheet} style={{flex:1,fontSize:21}} compact={true}>
-                    Close
-                  </Button>
-                  </View>
                   <View>
                     <RadioButton.Group
                       onValueChange={(value) => handleSortOptionPress(value)}
@@ -534,8 +525,16 @@
 
 
 
-         
-
+         {/* 
+          {isLoading && (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ position: 'absolute'}}>
+                <ActivityIndicator animating={true} color={MD2Colors.red800} />
+              </View>
+              <Text style={{ marginTop: 30, color: '#555555', fontSize: 16 }}>Discover savings, Shop Scanner awaits you!</Text>
+            </View>
+          )}
+        */}
 
 
 
@@ -562,8 +561,7 @@
     closeButton: {
       position: 'absolute',
       top: 10,
-      right: 20
-      
+      right: 20,
     },
     closeButtonText: {
       fontSize: 28,
@@ -572,9 +570,7 @@
     title: {
       fontSize: 18,
       marginBottom: 10,
-      marginTop:5,
       fontWeight: 'bold',
-      flex:2
     },
     radioButtonContainer: {
       marginTop: 10,

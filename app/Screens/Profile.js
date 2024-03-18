@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { View, Text,StyleSheet,Image } from 'react-native';
+import { View, Text,StyleSheet,Image,ScrollView } from 'react-native';
 import { Avatar, Button, Chip, List,Modal } from 'react-native-paper';
 import {router} from 'expo-router';
 import LoginScreen from './Login';
@@ -29,47 +29,49 @@ const Profile = () => {
         setShowLoginScreen(false); // Hide the Login screen
       };
 
-    const renderProfileView = () => (
+    
 
-        <View style={{ flex: 1,alignItems:'center' }}>  
-        <Text style={{ fontSize: 20, marginTop: 20 }}>Profile</Text>
-        <Avatar.Image
-          size={80}
-          source={require('./../../assets/usericon.png')}
-          style={{
-              backgroundColor: 'grey',
-              marginVertical: 20,
-              padding: 0,
-              overflow: 'hidden'
-            }}        
-          resizeMode="cover" // or "cover", "stretch", "center" as per your requirement
-        />
-        <Text style={{fontSize:21,marginBottom:10}}>Guest</Text>
-        {isLoggedIn ? (
-          <Text style={styles.loggedInText}>Logged In</Text>
-        ) : (
-          <Chip icon="login" onPress={() => setShowLoginScreen(true)}>
-            Login
-          </Chip>
-        )}
+  return (
+    <View style={{ flex: 1 }}>
+            <View style={{ flex: 1,alignItems:'center' }}>  
+              <Text style={{ fontSize: 20, marginTop: 20 }}>Profile</Text>
+              <Avatar.Image
+                size={80}
+                source={require('./../../assets/usericon.png')}
+                style={{
+                    backgroundColor: 'grey',
+                    marginVertical: 20,
+                    padding: 0,
+                    overflow: 'hidden'
+                  }}        
+                resizeMode="cover" // or "cover", "stretch", "center" as per your requirement
+              />
+              <Text style={{fontSize:21,marginBottom:10}}>Guest</Text>
+              {isLoggedIn ? (
+                <Text style={styles.loggedInText}>Logged In</Text>
+              ) : (
+                <Chip icon="login" onPress={() => setShowLoginScreen(true)}>
+                  Login
+                </Chip>
+              )}
         
-        <Text style={{ alignSelf: 'flex-start', marginLeft: 20,marginTop:20,fontSize:20 }}>My Account</Text>
-      
-        <View style={{flex:1,alignSelf: 'flex-start',paddingLeft:15,marginTop:10,width:'100%',paddingRight:15}}>  
+              <Text style={{ alignSelf: 'flex-start', marginLeft: 20,marginTop:20,fontSize:20 }}>My Account</Text>
+            
+              <View style={{flex:1,alignSelf: 'flex-start',paddingLeft:15,marginTop:10,width:'100%',paddingRight:15}}>  
         
         <List.Item
-      title="Notification Settings"
-      left={() => (
-        <Image
-          source={require('..//..//assets/notification_icon.png')}
-          style={{ width: 24, height: 24, marginRight: 16 }}
-        />
-      )}
-      titleStyle={{ color: 'black' }}
-      onPress={() => console.log('Notification Settings Pressed')}
-    />
+              title="Notification Settings"
+              left={() => (
+                <Image
+                  source={require('..//..//assets/notification_icon.png')}
+                  style={{ width: 24, height: 24, marginRight: 16 }}
+                />
+              )}
+              titleStyle={{ color: 'black' }}
+              onPress={() => console.log('Notification Settings Pressed')}
+            />
       
-      <View style={{ height: 1, width: '100%', backgroundColor: '#dfdfdf', marginTop: 10 }} />
+        <View style={{ height: 1, width: '100%', backgroundColor: '#dfdfdf', marginTop: 10 }} />
   
         <List.Item
           title="About Us"
@@ -105,23 +107,11 @@ const Profile = () => {
                   titleStyle={{ color: 'black' }} // Set text color to black
 
               />
-                            <View style={{ height: 1, width: '100%', backgroundColor: '#dfdfdf', marginTop: 10 }} />
+          <View style={{ height: 1, width: '100%', backgroundColor: '#dfdfdf', marginTop: 10 }} />
                     
         </View>  
-        </View>    
-  
-  
-       
-        );
-
-  return (
-    <View style={{ flex: 1 }}>
-     {(isLoggedIn || !showLoginScreen) ? (
-          renderProfileView()
-        ) : (
-          <LoginScreen onClose={handleCloseLogin} />
-        )}
-            </View>
+            </View>  
+    </View>
           );
 };
 
