@@ -14,6 +14,8 @@ import logo from '..//..//assets/icon.png'; // Replace with the correct path
 import search_icon from '..//..//assets/search_icon.png'; // Replace with the correct path
 import { StatusBar } from 'expo-status-bar';
 import { Link,router,useNavigation } from 'expo-router';
+import { FlashList } from "@shopify/flash-list";
+import FastImage from 'react-native-fast-image'
 
 const cardsData1 = [
   { image: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-09%20(1).png?alt=media&token=847953b0-2fe6-4297-a3c6-b73be0616a2d', tags: ['beauty', 'beauty & personal care', 'facewash', 'sunscreen', 'face serum', 'faceserum', 'serum', 'moisturizer', 'moituriser', 'hair care', 'hairwash', 'shampoo', 'hairserum', 'makeup', 'perfumes', 'perfume', 'fragrance', 'deo']},
@@ -21,6 +23,18 @@ const cardsData1 = [
   { image: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-11%20(1).png?alt=media&token=dc56ca71-3815-4c50-99dd-13be3a04e1f1', tags: ['beauty', 'beauty & personal care', 'facewash', 'sunscreen', 'face serum', 'faceserum', 'serum', 'moisturizer', 'moituriser', 'hair care', 'hairwash', 'shampoo', 'hairserum', 'makeup', 'perfumes', 'perfume', 'fragrance', 'deo', 'women\'s fashion', 'shirts & t-shirts', 'womenshirt', 'womentshirt', 'womenshirts', 'jeans & trousers', 'womenjeans', 'womentrouser', 'women ethnic wear', 'womenethnicwear', 'sarees', 'saree', 'lehenga', 'winter wear', 'womenwinterwear', 'watches', 'womenwatch', 'smartwatch', 'accessories', 'womenaccessories', 'backpack', 'bags', 'men\'s fashion', 'shirts & t-shirts', 'menshirt', 'mentshirt', 't-shirt', 'jeans & trousers', 'men jeans', 'men\'s jeans', 'ethnic wear', 'menethnicwear', 'winter wear', 'menwinterwear', 'watches', 'menwatch', 'smartwatch', 'accessories', 'menaccessories', 'backpack', 'bags']},
   { image: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-10%20(1).png?alt=media&token=0bbd9921-a2a1-4e13-bb17-edc89cf39a1b', tags: ['haircare','hair care', 'hairwash', 'shampoo', 'hairserum'] },
   // Add more cards as needed
+];
+
+const viewsData = [
+  { type: 'TopHomeCarousel' },
+  { type: 'CategoriesSection' },
+  { type: 'ArrivedJustNow' },
+  { type: 'BottomHomeCarousel' },
+  { type: 'PercentageCardsList' },
+  { type: 'ValueStore' },
+  { type: 'PriceCards' },
+  { type: 'ScrollableCards1' },
+  { type: 'MadeWithLove' },
 ];
 
 const placeholderTexts = ["Search for products", "Search for Lipstick", "Search for Shoes"]; // Array of placeholder texts
@@ -72,7 +86,30 @@ const HomeScreen = (props) => {
     return () => clearInterval(intervalId);
   }, [opacityAnimation, placeholderTexts]);
 
-
+  const renderItem = ({ item }) => {
+    switch (item.type) {
+      case 'TopHomeCarousel':
+        return <TopHomeCarousel />;
+      case 'CategoriesSection':
+        return <CategoriesSection />;
+      case 'ArrivedJustNow':
+        return <ArrivedJustNow />;
+      case 'BottomHomeCarousel':
+        return <BottomHomeCarousel />;
+      case 'PercentageCardsList':
+        return <PercentageCardsList />;
+      case 'ValueStore':
+        return <ValueStore />;
+      case 'PriceCards':
+        return <PriceCards />;
+      case 'ScrollableCards1':
+        return <ScrollableCards1 cardsData={cardsData1} />;
+      case 'MadeWithLove':
+        return <MadeWithLove />;
+      default:
+        return null;
+    }
+  };
 
   const handleRefresh = () => {
     setRefreshing(true); // Set refreshing to true when refreshing starts
@@ -97,15 +134,15 @@ const HomeScreen = (props) => {
             <Text style={{ marginTop: 15, color: '#555555', fontSize: 16,paddingLeft:30,paddingRight:30,textAlign:'center' }}>Discover savings, Shop Scanner awaits you!</Text>
         </View>
       ) : (
-        <View style={{}}>
-            <StatusBar backgroundColor='#fff' />
+        <View style={{flex:1}}>
+              <StatusBar backgroundColor='#fff' />
               <View style={{backgroundColor:'white'}}>
               <View style={{ backgroundColor: 'white', height: 70 }}>
-                <Image source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} />
+                <FastImage source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} />
               </View>
            
               <View style={styles.inputContainer}>
-              <Image source={search_icon} style={{width:22,height:22,marginLeft:5}}/>  
+              <FastImage source={search_icon} style={{width:22,height:22,marginLeft:5}}/>  
 
                 
               <TextInput
@@ -116,28 +153,18 @@ const HomeScreen = (props) => {
                     />
 
             </View>
-            </View>
-          <FlatList
-            data={cardsData1}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={styles.scrollViewContent}
-            showsVerticalScrollIndicator={false}
-            style={{ backgroundColor: '#f5f5f5',paddingTop:7,marginBottom:130 }}
-            refreshControl={Platform.OS !== 'web' && <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+              </View>
+              <FlatList
+                  data={viewsData}
+                  estimatedItemSize={5}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsVerticalScrollIndicator={false}
+                  refreshControl={Platform.OS !== 'web' && <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+                  initialScrollIndex={0}
+                  
 
-            ListHeaderComponent={
-              <>
-                <TopHomeCarousel />
-                <CategoriesSection />
-                <ArrivedJustNow />
-                <BottomHomeCarousel />
-                <PercentageCardsList />
-                <ValueStore />
-                <PriceCards />
-                <ScrollableCards1 cardsData={cardsData1} />
-                <MadeWithLove />
-              </>
-            }
+           
 
           />
         </View>
@@ -148,7 +175,6 @@ const HomeScreen = (props) => {
 
 const styles = StyleSheet.create({
   scrollViewContent: {
-    flexGrow: 1,
   },
   container: {
     flex: 1,

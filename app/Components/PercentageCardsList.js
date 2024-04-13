@@ -4,7 +4,7 @@ import { TouchableOpacity, Text, ImageBackground } from 'react-native';
 import { router,useLocalSearchParams } from 'expo-router';
 
 const PercentageCardsList = () => {
-  const percentages = [50, 60, 70, 80, 90];
+  const percentages = [ 90,80,70,60,50];
   const params = useLocalSearchParams();
 
   const handleCardPress = (percentage) => {

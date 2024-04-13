@@ -5,8 +5,8 @@ import HomeScreen from './Screens/HomeScreen';
 import AllCategories from './Screens/AllCategories';
 import NotificationScreen from './Screens/NotificationScreen';
 import { router, useNavigation } from 'expo-router';
-import DealsList from './Screens/DealsListNew';
 import SearchScreen from './Screens/SearchScreen';
+import DealsList from './Screens/DealsList';
 
 const Tab = createBottomTabNavigator();
 

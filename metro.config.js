@@ -7,7 +7,7 @@ module.exports = {
     ...defaultConfig,
     web: {
       corsHeaders: {
-        '192.168.1.9': 'allow', // replace '192.168.1.13' with your computer's IP address
+        '192.168.1.4': 'allow', // replace '192.168.1.13' with your computer's IP address
       },
     },
   };

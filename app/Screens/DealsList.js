@@ -25,7 +25,6 @@
   import { StatusBar } from 'expo-status-bar';
 
 
-
   const DealsList = () => {
 
     const screenHeight = Dimensions.get('window').height;
@@ -272,13 +271,12 @@
     
     useEffect(() => {
 
-      if (!initialFetchDone || sortOptionChanged ||filterChanged ) {
+      if (!initialFetchDone || sortOptionChanged ||filterChanged || refreshing) {
         setLastVisible(null);
         console.log('isLoading',isLoading)
 
         if(lastVisible==null)
           {
-          console.log('fetch deals is running now Hurrayyy')
           fetchDeals();
           setSortOptionChanged(false); // Reset sortOptionChanged after fetching deals
           setInitialFetchDone(true);
@@ -286,16 +284,15 @@
           }
 
           setIsLoading(false);
+          setRefreshing(false);
+
 
       }
 
-      else if(refreshing){
-        fetchDeals();
-        setRefreshing(false);
-      }
+      
   
        
-      }, [isMoreDataAvailable, selectedSortOption,sortOptionChanged,isLoading,lastVisible,filterChanged,selectedDiscountOptions,setDeals,setIsLoading,refreshing,setRefreshing]);
+      }, [isMoreDataAvailable, selectedSortOption,sortOptionChanged,isLoading,lastVisible,filterChanged,selectedDiscountOptions,setDeals,setIsLoading,refreshing]);
 
 
     return (
@@ -306,12 +303,12 @@
 
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', elevation: 3, height: 70 }}>
             <TouchableOpacity onPress={handleBackPress} style={{ padding: 10 }}>
-              <Image source={backIcon} style={{ width: 24, height: 24, margin: 0 }} />
+              <FastImage source={backIcon} style={{ width: 24, height: 24, margin: 0 }} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 'auto' }}>
               <TouchableOpacity onPress={handleBackPress} >
 
-              <Image source={logo} style={{ width: 64, height: 64, marginRight: 5 }} />
+              <FastImage source={logo} style={{ width: 64, height: 64, marginRight: 5 }} />
               </TouchableOpacity>
             </View>
         </View>
@@ -329,7 +326,7 @@
                 </View>
 
                 <View>
-                  <Image 
+                  <FastImage 
                       source={{ uri: 'https://assets.ajio.com/cms/AJIO/MOBILE/M-1.0-UHP-15022024-JIT-DAZZLINGDISCOUNTS-header.jpg' }}
                       style={{ width: '100%', height: 90,opacity:0.85,display:'none'}}
                   />
@@ -388,14 +385,13 @@
                             {timeAgo(deal.dealTime)}
                           </Text>
        
-                          <Image
-                        source={storeImages[deal.store]}
-                        style={{
-                          width: 40,
-                          height:13,
-                          resizeMode: 'contain',
-                          
-                        }}
+                          <FastImage
+                              source={storeImages[deal.store]}
+                              style={{
+                                width: 40,
+                                height:13,  
+                                          }}
+                              resizeMode={FastImage.resizeMode.contain}
                       />
                         </View>
                         <View style={{ height:'80%' }}>
@@ -449,7 +445,7 @@
               {/* Sort Button */}
               <TouchableWithoutFeedback onPress={showBottomSheet} style={{height:60}} >
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',height:60 }}>
-                  <Image source={require('../../assets/user.png')} style={{ width: 24, height: 24 }} />
+                  <FastImage source={require('../../assets/user.png')} style={{ width: 24, height: 24 }} />
                   <Text style={{ fontWeight: '400', marginLeft: 5, color: '#0f0f0f',fontFamily:'Poppins-SemiBold' }}>Sort</Text>
                 </View>
               </TouchableWithoutFeedback>
@@ -462,7 +458,7 @@
 
               <TouchableWithoutFeedback onPress={() => setIsFilterScreenVisible(true)} style={{height:60}}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                  <Image source={require('../../assets/filter.png')} style={{ width: 24, height: 24 }} />
+                  <FastImage source={require('../../assets/filter.png')} style={{ width: 24, height: 24 }} />
                   <Text style={{ fontWeight: '400', marginLeft: 5, color: '#000',fontFamily:'Poppins-SemiBold' }}>Filter</Text>
                 </View>
               </TouchableWithoutFeedback>

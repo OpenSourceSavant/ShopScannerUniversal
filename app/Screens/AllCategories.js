@@ -4,6 +4,7 @@ import { Dimensions } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar } from 'react-native-paper';
 import logo from '..//..//assets/icon.png'; // Replace with the correct path
+import FastImage from 'react-native-fast-image'
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -160,7 +161,7 @@ const AllCategories = ({route} ) => {
     }}
       onPress={() => setSelectedCategoryId(item.id)}
     >
-      <Image
+      <FastImage
         source={item.image}
         style={{
           height: 74,
@@ -185,7 +186,7 @@ const AllCategories = ({route} ) => {
   return (
     <View style={{flex:1}}>
       <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', elevation: 3, height: 70 }}>
-        <Image source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} />
+        <FastImage source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} />
       </View>
      
     
@@ -210,15 +211,16 @@ const AllCategories = ({route} ) => {
                 style={{ padding: 10, width: subcategoryItemWidth, alignItems: 'center' }}
                 onPress={() => router.push({ pathname: 'Screens/DealsList', params: { tags: item.tags,lastRoute:'Categories',initialRouteSubCategory:selectedCategoryId } })}
               >
-              <Image
+              <FastImage
                 source={item.image}
                 style={{
                   height: 84,
                   width: 84,
                   borderRadius: 36,
                   overflow: 'hidden',
-                  resizeMode: 'contain',
+                  
                 }}
+                resizeMode={FastImage.resizeMode.contain}
               />
               
               <Text style={{ textAlign: 'center', fontSize: 13, fontWeight: "400", marginTop: 5 }}>{item.name}</Text>

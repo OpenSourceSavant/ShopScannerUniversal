@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,FlatList,Image } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
 const discountOptions = ['90% and above', '80% and above', '70% and above'];
+const PriceFilterOptions=['0-499','500-999','1000-1999','2000-3999','4000 & Above']
 
+const leftItems = [
+  {'name':'Price','id':0},{'name':'Discount','id':1}]
 
 const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
   const [selectedDiscountOptions, setSelectedDiscountOptions] = useState([]);
   const [discountFilterChanged, setDiscountFilterChanged] = useState(false);
+  const [selectedleftItemID, setSelectedleftItemID] = useState(0);
 
   useEffect(() => {
     setSelectedDiscountOptions(propSelectedDiscountOptions || []);
@@ -50,6 +54,20 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
     onClose();
   };
 
+  const renderLeftItem = ({ item }) => (
+    <TouchableOpacity
+      style={{ flex: 1, padding:9, alignItems: 'center', justifyContent: 'center',
+      backgroundColor: selectedleftItemID === item.id ? '#f9f9f9' : 'transparent',
+      borderLeftWidth: selectedleftItemID === item.id ? 5 : 0,
+      borderLeftColor: selectedleftItemID === item.id ? '#D63C63' : 'transparent',
+      
+    }}
+    >
+     
+      <Text style={{ fontSize: 12, textAlign: 'center',fontWeight:"500" }}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={{ flex: 1 ,paddingTop:20}}>
       <View style={{ backgroundColor: '#fff', elevation: 3, height: 70, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
@@ -65,16 +83,19 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ flex: 1 / 3, backgroundColor: '#F2F2F2', padding: 15, height: '100%' }}>
-          {/* Use your own logic for rendering filter options */}
-          <TouchableOpacity style={{  backgroundColor: '#FF4081',
-          paddingVertical: 10,
-          paddingHorizontal: 15,
-          borderRadius: 5,
-          marginBottom: 10,}}>
-          <Text style={{ color: '#fff' }}>Discount Filter</Text>
-          </TouchableOpacity>
+      <View style={{ flexDirection: 'row', flex: 1,backgroundColor:'#f9f9f9' }}>
+        <View style={{ flex: 2, backgroundColor: '#F2F2F2',height: '100%' }}>
+
+        <FlatList
+          data={leftItems}
+          keyExtractor={(item) => item.id}
+          renderItem={renderLeftItem}
+          numColumns={1}
+          style={{backgroundColor:'#E2E0E0'}}
+        />
+
+          
+        
         </View>
 
         <View style={styles.container}>
@@ -140,7 +161,7 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flex: 2 / 3,
+    flex: 5,
     height: '100%',
     marginRight: 10,
     overflow: 'hidden',

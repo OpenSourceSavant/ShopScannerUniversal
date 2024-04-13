@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, ImageBackground, StyleSheet,Platform } from 'react-native';
 import { router, useNavigation } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import FastImage from 'react-native-fast-image'
 
 const isAndroid = Platform.OS === 'android';
 
@@ -142,7 +143,7 @@ const CategoriesSection = () => {
             style={styles.categoryCard}
             onPress={() => handleCategoryClick(category)}
           >
-            <Image source={category.image} style={styles.categoryImage} />
+            <FastImage source={category.image} style={styles.categoryImage} resizeMode={FastImage.resizeMode.cover}/>
             <Text style={styles.categoryText}>{category.name}</Text>
           </TouchableOpacity>
         ))}
@@ -154,12 +155,12 @@ const CategoriesSection = () => {
             style={styles.categoryCard}
             onPress={() => handleCategoryClick(category)}
           >
-            <Image source={category.image} style={styles.categoryImage} />
+            <FastImage source={category.image} style={styles.categoryImage} resizeMode={FastImage.resizeMode.cover} />
             <Text style={styles.categoryText}>{category.name}</Text>
           </TouchableOpacity>
         ))}
         <TouchableOpacity style={styles.categoryCard} onPress={handleSeeAllClick}>
-          <Image source={categories[7].image} style={styles.categoryImage} />
+          <FastImage source={categories[7].image} style={styles.categoryImage} resizeMode={FastImage.resizeMode.cover}/>
           <Text style={styles.categoryText}>{categories[7].name}</Text>
         </TouchableOpacity>
       </View>
@@ -192,8 +193,7 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 60, // Half of the width and height to make it circular
     overflow: 'hidden',
-    resizeMode:'cover',
- 
+    
   },
 
   categoryText: {

@@ -136,18 +136,18 @@ const HomePage = () => {
       } 
 
       ////////////////////////ANDROID PART ////////////////////////////////////////
-      else if (Platform.OS === 'android'){
-        try {
-          const {amplitude} = await import ('@amplitude/analytics-react-native');
-          const { track } =await import('@amplitude/analytics-react-native');
-          amplitude.init('c1ed90ed03168877e05a8d1673295654');
-          track('App Open');
+      else if (Platform.OS === 'android' && Device.isDevice){
+        try {          
+
           
+          const {firebase} = await import('@react-native-firebase/analytics');
+          
+          await firebase.analytics().setAnalyticsCollectionEnabled(true);
           const firebaseAnalyticsModule = await import('@react-native-firebase/analytics');
           const analytics = firebaseAnalyticsModule.default(); // Get the default analytics instance
           
           // Log "app_open" event
-          await analytics.logEvent('app_open');
+          await analytics.logEvent('android_app_open');
           
           // Enable automatic event logging
           await analytics.setAnalyticsCollectionEnabled(true);
@@ -180,6 +180,7 @@ const HomePage = () => {
           
           console.log('Expo Push Token:', expoPushToken);
            // Get the Android device ID
+          androidDeviceId= Application.getAndroidId()
           console.log('Android Device ID:', androidDeviceId);
 
           const fetchAndUpdateExpoTokens = async () => {

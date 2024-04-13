@@ -12,7 +12,13 @@ const DesktopHomeScreen = () => {
       <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', elevation: 3, height: 70 }}>
         <Image source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} />
       </View>
+      
+      <TopDesktopCarousel/>
 
+      <DesktopHomeSectionArrivedJustNow/>
+      <DesktopHomeDealsDection2/>
+      
+      {/* Rest of your content goes here */}
       
     </ScrollView>
   );

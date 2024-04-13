@@ -4,6 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '..//..//firebaseConfig';
 import { Linking } from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 import FlipkartLogo from '..//..//assets/flipkart_logo.png';
 import AmazonLogo from '..//..//assets/amazon_logo.png';
@@ -76,13 +77,9 @@ const ArrivedJustNow = () => {
       const supported = await Linking.canOpenURL(url);
   
       if (supported) {
-        if (Platform.OS === 'ios') {
-          // For iOS, try opening the Amazon app
-          await Linking.openURL('amzn://app');
-        } else {
-          // For other platforms, open the URL and fallback to the browser
+       
           await Linking.openURL(url);
-        }
+        
       } else {
         console.error(`Unable to open URL: ${url}`);
       }
@@ -130,10 +127,11 @@ const ArrivedJustNow = () => {
           }}
         >
           {/* Top bar with store logo and favorite icon */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', position: 'relative', height: 25, marginTop: 5 }}>
-            <Image
-              style={{ resizeMode:'contain',width:50, maxWidth: 75, height: 35 }}
-              source={storeImages[deal.store]}              
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', position: 'relative', height: 25}}>
+            <FastImage
+              style={{ width:40, maxWidth: 75, height: 30 }}
+              source={storeImages[deal.store]}
+              resizeMode={FastImage.resizeMode.contain}            
             />
 
         <Text style={{ fontWeight: '400', fontSize: 10, textAlign: 'right',marginRight:8 }}>{timeAgo(deal.dealTime)}</Text>
@@ -143,10 +141,11 @@ const ArrivedJustNow = () => {
           </View>
 
           {/* Deal image and details */}
-          <Image
-            style={{ height: 100, resizeMode: 'contain',marginTop:10 }}
+          <FastImage
+            style={{ height: 100,marginTop:10 }}
             source={{ uri: deal.imageUrl }}
             alt={deal.productTitle}
+            resizeMode={FastImage.resizeMode.contain}
           />
 
           <View style={{ justifyContent: 'space-between', padding: 10 }}>

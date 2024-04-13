@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView,View,Image,StyleSheet } from 'react-native';
 import { Card, Title } from 'react-native-paper';
 import { Link,router } from 'expo-router';
+import FastImage from 'react-native-fast-image'
 
 
 
