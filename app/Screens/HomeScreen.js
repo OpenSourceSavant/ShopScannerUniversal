@@ -1,6 +1,14 @@
-import React, { useEffect, useState,useRef } from 'react';
-import { View, StyleSheet, FlatList, Image, RefreshControl, Platform, TouchableOpacity,TextInput,Text,Animated } from 'react-native';
-import { ActivityIndicator, Appbar } from 'react-native-paper'; // Import TextInput from react-native-paper
+import React, { useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, FlatList, Image, RefreshControl, Platform, TouchableOpacity, TextInput, Text, Animated } from 'react-native';
+import { ActivityIndicator, Appbar } from 'react-native-paper';
+import { StatusBar } from 'expo-status-bar';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image'; // Import FastImage
+import logo from '..//..//assets/icon.png';
+import notification from '..//..//assets/notification.png';
+import search_icon from '..//..//assets/search_icon.png';
+import * as StoreReview from 'expo-store-review';
+import ChooseByStore from '../Components/ChooseByStore';
 import ValueStore from '../Components/ValueStore';
 import PercentageCardsList from '../Components/PercentageCardsList';
 import CategoriesSection from '../Components/CategoriesSection';
@@ -10,12 +18,21 @@ import TopHomeCarousel from '../Components/TopHomeCarousel';
 import MadeWithLove from '../Components/MadeWithLove';
 import ScrollableCards1 from '../Components/ScrollableCards1';
 import BottomHomeCarousel from '../Components/BottomHomeCarousel';
-import logo from '..//..//assets/icon.png'; // Replace with the correct path
-import search_icon from '..//..//assets/search_icon.png'; // Replace with the correct path
-import { StatusBar } from 'expo-status-bar';
-import { Link,router,useNavigation } from 'expo-router';
-import { FlashList } from "@shopify/flash-list";
-import FastImage from 'react-native-fast-image'
+import setupGoogleAnalytics from '../analytics';
+import { useLocalSearchParams,router } from 'expo-router';
+
+// Sample data for different types of views
+const viewsData = [
+  { type: 'TopHomeCarousel' },
+  { type: 'CategoriesSection' },
+  { type: 'ChooseByStore' },
+  { type: 'BottomHomeCarousel' },
+  { type: 'PercentageCardsList' },
+  { type: 'ValueStore' },
+  { type: 'PriceCards' },
+  { type: 'ScrollableCards1' },
+  { type: 'MadeWithLove' },
+];
 
 const cardsData1 = [
   { image: 'https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-09%20(1).png?alt=media&token=847953b0-2fe6-4297-a3c6-b73be0616a2d', tags: ['beauty', 'beauty & personal care', 'facewash', 'sunscreen', 'face serum', 'faceserum', 'serum', 'moisturizer', 'moituriser', 'hair care', 'hairwash', 'shampoo', 'hairserum', 'makeup', 'perfumes', 'perfume', 'fragrance', 'deo']},
@@ -25,40 +42,51 @@ const cardsData1 = [
   // Add more cards as needed
 ];
 
-const viewsData = [
-  { type: 'TopHomeCarousel' },
-  { type: 'CategoriesSection' },
-  { type: 'ArrivedJustNow' },
-  { type: 'BottomHomeCarousel' },
-  { type: 'PercentageCardsList' },
-  { type: 'ValueStore' },
-  { type: 'PriceCards' },
-  { type: 'ScrollableCards1' },
-  { type: 'MadeWithLove' },
-];
+// Placeholder texts for search input
+const placeholderTexts = ["Search for Products", "Search for Lipstick", "Search for Shoes", "Search for your favourite brand"];
 
-const placeholderTexts = ["Search for products", "Search for Lipstick", "Search for Shoes"]; // Array of placeholder texts
-
-const HomeScreen = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
+const HomeScreen = ({ route }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0); // Index to track the current placeholder text
-  const [opacityAnimation] = useState(new Animated.Value(1)); // Initial opacity value for the animation
-
+  const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
+  const [opacityAnimation] = useState(new Animated.Value(1));
+  const [randomLoaderText, setRandomLoaderText] = useState('');
+  const [lastClickedIndex, setLastClickedIndex] = useState(null);
   const navigation = useNavigation();
 
+  //const lastRoute = useLocalSearchParams().lastRoute;
+
+  const { lastRoute } = route.params;
+
+  const flatListRef = useRef(null);
+
   useEffect(() => {
-    // Simulating a delay for 1 second
+    // Simulate loading with a timeout
+    if (lastRoute=='Splash'){
+      setIsLoading(true)
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
 
-    // Clear the timeout in case the component unmounts before 1 second
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer); // Cleanup timeout on unmount
+  }
+  else{
+    setIsLoading(false)
+  }
+  }, [lastRoute]);
+
+  useEffect(() => {
+    const initializeAnalytics = async () => {
+      const analytics = await setupGoogleAnalytics();
+      // Now you can use 'analytics' to log events or retrieve analytics data
+      analytics.logEvent('home_screen_android')
+    };
+
+    initializeAnalytics();
   }, []);
 
   useEffect(() => {
-    // Function to animate the placeholder text
+    // Animate placeholder text
     const animatePlaceholder = () => {
       Animated.sequence([
         Animated.timing(opacityAnimation, {
@@ -72,100 +100,135 @@ const HomeScreen = (props) => {
           useNativeDriver: true,
         }),
       ]).start(() => {
-        // After animation completes, move to the next placeholder text
         setCurrentPlaceholderIndex((prevIndex) =>
           prevIndex === placeholderTexts.length - 1 ? 0 : prevIndex + 1
         );
       });
     };
 
-    // Call the animatePlaceholder function initially and set it to repeat
-    const intervalId = setInterval(animatePlaceholder, 2000);
+    const intervalId = setInterval(animatePlaceholder, 2000); // Start animation interval
 
-    // Clean up function to clear the interval
-    return () => clearInterval(intervalId);
-  }, [opacityAnimation, placeholderTexts]);
-
-  const renderItem = ({ item }) => {
-    switch (item.type) {
-      case 'TopHomeCarousel':
-        return <TopHomeCarousel />;
-      case 'CategoriesSection':
-        return <CategoriesSection />;
-      case 'ArrivedJustNow':
-        return <ArrivedJustNow />;
-      case 'BottomHomeCarousel':
-        return <BottomHomeCarousel />;
-      case 'PercentageCardsList':
-        return <PercentageCardsList />;
-      case 'ValueStore':
-        return <ValueStore />;
-      case 'PriceCards':
-        return <PriceCards />;
-      case 'ScrollableCards1':
-        return <ScrollableCards1 cardsData={cardsData1} />;
-      case 'MadeWithLove':
-        return <MadeWithLove />;
-      default:
-        return null;
-    }
-  };
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, [opacityAnimation]);
 
   const handleRefresh = () => {
-    setRefreshing(true); // Set refreshing to true when refreshing starts
+    setRefreshing(true);
     setTimeout(() => {
-      setRefreshing(false); // Set refreshing to false when refreshing ends
+      setRefreshing(false);
     }, 1000);
   };
 
   const navigateToSearchScreen = () => {
-    navigation.dispatch(router.push('Screens/SearchScreen'));
+    navigation.navigate('SearchScreen'); // Navigate to SearchScreen
+  };
+
+  const handleItemClick = (type) => {
+    console.log('Handling item click for type:', type);
+    // Log the name of the component clicked based on its type
+    switch (type) {
+      case 'TopHomeCarousel':
+        console.log('TopHomeCarousel clicked');
+        break;
+      case 'CategoriesSection':
+        console.log('CategoriesSection clicked');
+        break;
+      case 'ChooseByStore':
+        console.log('ChooseByStore clicked');
+        break;
+      case 'BottomHomeCarousel':
+        console.log('BottomHomeCarousel clicked');
+        break;
+      case 'PercentageCardsList':
+        console.log('PercentageCardsList clicked');
+        break;
+      case 'ValueStore':
+        console.log('ValueStore clicked');
+        break;
+      case 'PriceCards':
+        console.log('PriceCards clicked');
+        break;
+      case 'ScrollableCards1':
+        console.log('ScrollableCards1 clicked');
+        break;
+      case 'MadeWithLove':
+        console.log('MadeWithLove clicked');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleNotificationClick = () => {
+    // Perform your action here
+    router.push('Screens/NotificationScreen')
+  };
+
+  const renderItem = ({ item, index }) => {
+
+    const Component = {
+      'TopHomeCarousel': <TopHomeCarousel  />,
+      'CategoriesSection': <CategoriesSection  />,
+      'ChooseByStore': <ChooseByStore  />,
+      'BottomHomeCarousel': <BottomHomeCarousel  />,
+      'PercentageCardsList': <PercentageCardsList  />,
+      'ValueStore': <ValueStore  />,
+      'PriceCards': <PriceCards  />,
+      'ScrollableCards1': <ScrollableCards1  cardsData={cardsData1} />,
+      'MadeWithLove': <MadeWithLove  />,
+    }[item.type];
+
+    return (
+       <TouchableOpacity onPress={() => console.log(`Handling item click for type: ${item.type}`)} style={styles.touchable}>
+        {Component}
+      </TouchableOpacity>
+    );
   };
 
   return (
     <View style={styles.container}>
-     
-
       {isLoading ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View >
-              <ActivityIndicator animating={true} color={'#d53b62'} />
-            </View>
-            <Text style={{ marginTop: 15, color: '#555555', fontSize: 16,paddingLeft:30,paddingRight:30,textAlign:'center' }}>Discover savings, Shop Scanner awaits you!</Text>
+        <View style={styles.loadingIndicator}>
+          <ActivityIndicator animating={true} color={'#d53b62'} />
+          <Text style={{ marginTop: 15, color: '#555555', fontSize: 16, paddingLeft: 30, paddingRight: 30, textAlign: 'center' }}>{randomLoaderText}</Text>
         </View>
       ) : (
-        <View style={{flex:1}}>
-              <StatusBar backgroundColor='#fff' />
-              <View style={{backgroundColor:'white'}}>
-              <View style={{ backgroundColor: 'white', height: 70 }}>
-                <FastImage source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} />
-              </View>
-           
-              <View style={styles.inputContainer}>
-              <FastImage source={search_icon} style={{width:22,height:22,marginLeft:5}}/>  
+        <View style={{ flex: 1 }}>
+          <StatusBar backgroundColor='#fff' />
+          <Appbar.Header style={{ height: 40, marginTop: -15,backgroundColor:'#fff' }}>
+            <Image source={logo} style={{ width: 55, height: 55, marginLeft: 10 }} />
+            <View style={{ flex: 1 }}></View>
+            <TouchableOpacity onPress={handleNotificationClick}>
+              <Image source={notification} style={{ width: 28, height: 28, marginRight: 10 }} />
+            </TouchableOpacity>
 
-                
+          </Appbar.Header>
+
+
+
+          <View style={{ backgroundColor: "#fff" }}>
+            <View style={styles.inputContainer}>
+              {((Platform.OS === 'android' || Platform.OS === 'ios')) ? (
+                <FastImage source={search_icon} style={{ width: 24, height: 24, marginLeft: 5 }} />
+              ) : (
+                <Image source={search_icon} style={{ width: 66, height: 66, marginLeft: 5 }} resizeMode="cover" />
+              )}
               <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#222"
-                    onFocus={navigateToSearchScreen}
-                    placeholder={placeholderTexts[currentPlaceholderIndex]}
-                    />
-
+                style={styles.input}
+                placeholderTextColor="#222"
+                onFocus={navigateToSearchScreen}
+                placeholder={placeholderTexts[currentPlaceholderIndex]}
+              />
             </View>
-              </View>
-              <FlatList
-                  data={viewsData}
-                  estimatedItemSize={5}
-                  renderItem={renderItem}
-                  keyExtractor={(item, index) => index.toString()}
-                  showsVerticalScrollIndicator={false}
-                  refreshControl={Platform.OS !== 'web' && <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
-                  initialScrollIndex={0}
-                  
-
-           
-
+          </View>
+          <FlatList
+            data={viewsData}
+            ref={flatListRef}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            showsVerticalScrollIndicator={false}
+            refreshControl={Platform.OS !== 'web' && <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+            initialScrollIndex={0}
+            style={{ backgroundColor: '#fff' }}
           />
         </View>
       )}
@@ -174,15 +237,8 @@ const HomeScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  scrollViewContent: {
-  },
   container: {
     flex: 1,
-  },
-  cardImage: {
-    width: '100%',
-    height: 200, // adjust the height as needed
-    resizeMode: 'cover',
   },
   loadingIndicator: {
     flex: 1,
@@ -192,29 +248,24 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft:15,
-    paddingRight:15,
-    margin:10,
-    borderColor:'#d3d3d3',
-    borderWidth:1,
-    borderRadius:25,
-    padding:5,
-    paddingLeft:10,
-    backgroundColor:'white'
-
+    paddingLeft: 15,
+    paddingRight: 15,
+    margin: 10,
+    borderColor: '#d3d3d3',
+    borderWidth: 1,
+    borderRadius: 25,
+    height: 50,
+    padding: 5,
+    backgroundColor: '#fff'
   },
   input: {
     height: 30,
-    flex:1,
-    color:'#d3d3d3',
-    marginLeft:15
-   
-   
+    flex: 1,
+    color: '#d3d3d3',
+    marginLeft: 15
   },
-  logo: {
-    width: 54,
-    height: 54,
-    display:'none'
+  touchable: {
+    marginBottom: 10, // Adjust as needed for spacing between items
   },
 });
 

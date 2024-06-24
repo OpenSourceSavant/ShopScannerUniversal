@@ -1,11 +1,14 @@
 import React, { useState,useEffect  } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import { Dimensions } from 'react-native';
+import { Dimensions,Platform } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar } from 'react-native-paper';
 import logo from '..//..//assets/icon.png'; // Replace with the correct path
-import FastImage from 'react-native-fast-image'
 
+
+if (Platform.OS === 'android' || Platform.OS === 'ios') {
+  FastImage = require('react-native-fast-image');
+}
 const screenWidth = Dimensions.get('window').width;
 
 const AllCategories = ({route} ) => {
@@ -186,7 +189,13 @@ const AllCategories = ({route} ) => {
   return (
     <View style={{flex:1}}>
       <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', elevation: 3, height: 70 }}>
-        <FastImage source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} />
+        
+
+        {(Platform.OS === 'android' || Platform.OS === 'ios') ? (
+                    <FastImage source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} resizeMode={FastImage.resizeMode.cover}/>
+                  ) : (
+                    <Image source={logo} style={{ width: 64, height: 64, marginLeft: 5 }} resizeMode="cover" />
+                )}
       </View>
      
     
@@ -211,17 +220,27 @@ const AllCategories = ({route} ) => {
                 style={{ padding: 10, width: subcategoryItemWidth, alignItems: 'center' }}
                 onPress={() => router.push({ pathname: 'Screens/DealsList', params: { tags: item.tags,lastRoute:'Categories',initialRouteSubCategory:selectedCategoryId } })}
               >
-              <FastImage
-                source={item.image}
-                style={{
-                  height: 84,
-                  width: 84,
-                  borderRadius: 36,
-                  overflow: 'hidden',
-                  
-                }}
-                resizeMode={FastImage.resizeMode.contain}
-              />
+              
+
+              {(Platform.OS === 'android' || Platform.OS === 'ios') ? (
+                                  <FastImage source={item.image} style={{
+                                    height: 94,
+                                    width: 94,
+                                    borderRadius: 36,
+                                    overflow: 'hidden',
+                                    
+                                  }} 
+                                  resizeMode={FastImage.resizeMode.contain}/>
+                                ) : (
+                                  <Image source={item.image} style={{
+                                    height: 84,
+                                    width: 84,
+                                    borderRadius: 36,
+                                    overflow: 'hidden',
+                                    
+                                  }}
+                                   resizeMode="contain" />
+                              )}
               
               <Text style={{ textAlign: 'center', fontSize: 13, fontWeight: "400", marginTop: 5 }}>{item.name}</Text>
     </TouchableOpacity>

@@ -2,16 +2,11 @@
   "expo": {
     "name": "Shop Scanner",
     "slug": "ShopScannerUniversal",
-    "version": "4.2.0",
+    "version": "4.4.0",
     "scheme": "shopscanner",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash_screen_final.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -63,7 +58,14 @@
         "vibration": true 
        
       }
+    ],
+      [
+      "expo-contacts",
+      {
+        "contactsPermission": "Allow Shop Scanner to access your contacts."
+      }
     ]
+    
     ],
     "extra": {
       "router": {

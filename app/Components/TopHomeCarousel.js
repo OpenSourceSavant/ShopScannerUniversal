@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Dimensions,TouchableOpacity } from 'react-native';
-import SwiperFlatList from 'react-native-swiper-flatlist';
+import { View, ScrollView, Dimensions, TouchableOpacity, Platform, StyleSheet } from 'react-native';
 import { getDocs, query, collection, limit } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
-import { Link,router } from 'expo-router';
-import FastImage from 'react-native-fast-image'
+import { router } from 'expo-router';
+import { ActivityIndicator } from 'react-native-paper';
+
+let FastImage;
+if (Platform.OS === 'android' || Platform.OS === 'ios') {
+  FastImage = require('react-native-fast-image');
+}
 
 const TopHomeCarousel = () => {
   const [carouselImages, setCarouselImages] = useState([]);
@@ -31,58 +35,62 @@ const TopHomeCarousel = () => {
 
   const handleCarouselClick = (Tags) => {
     console.log('Carousel clicked with tags:', Tags);
-    router.push({ pathname: 'Screens/DealsList', params: { tags: Tags } })    
-
-  };
-
-  const renderPaginationItem = (item, index) => {
-    return (
-      <TouchableOpacity
-        key={index}
-        style={{
-          width: 4,
-          height: 4,
-          margin: 3,
-          borderRadius: 4,
-          backgroundColor: index === 0 ? 'blue' : 'lightgray', // Customize the color here
-          
-        }}
-      />
-    );
+    router.push({ pathname: 'Screens/DealsList', params: { tags: Tags,lastRoute:'HomeScreen' } });
   };
 
   return (
-    <View style={{ height: deviceWidth * 0.6 }}>
-      <SwiperFlatList
-        autoplay
-        autoplayDelay={4}
-        autoplayLoop
-        index={0}
-        showPagination
-        paginationStyleItem={{ width: 10, height: 6, borderRadius: 4, margin: 5 }} // Style object for the item (dot)
-        paginationStyleItemInactive={{ backgroundColor: 'lightgray',opacity:1 }} // Style object for the inactive item (dot)
-
-
+    <View style={{ flex: 1, height: 230,backgroundColor:'#fff' }}>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        style={{ marginLeft:10,marginRight:10 }}
+        contentContainerStyle={{ alignItems: 'center' }}
       >
-        {carouselImages.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => handleCarouselClick(item.Tags)}>
-
-          <View key={index} style={{ width: deviceWidth, height: deviceWidth * 0.6 }}>
-            <FastImage
-              source={{ uri: item.url }}
-              style={{
-                width: deviceWidth,
-                height: deviceWidth * 0.65,
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-              
-            />
-          </View>
-          </TouchableOpacity>
-        ))}
-      </SwiperFlatList>
+        {carouselImages.length > 0 ? (
+          carouselImages.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleCarouselClick(item.Tags)}
+              style={{ borderRadius:10 }}
+            >
+              <View style={styles.imageContainer}>
+                {(Platform.OS === 'android' || Platform.OS === 'ios') ? (
+                  <FastImage
+                    source={{ uri: item.url }}
+                    style={styles.image}
+                    resizeMode={FastImage.resizeMode.contain}
+                  />
+                ) : (
+                  <Image
+                    source={{ uri: item.url }}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
+                )}
+              </View>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <ActivityIndicator animating={true} size="large" />
+        )}
+      </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  imageContainer: {
+    borderRadius: 10,
+    overflow: 'hidden',
+    
+  },
+  image: {
+    width: Dimensions.get('window').width-20,
+    height: 230,
+    borderRadius: 10,
+    
+  },
+});
 
 export default TopHomeCarousel;

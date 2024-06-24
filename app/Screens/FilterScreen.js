@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity,FlatList,Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
 const discountOptions = ['90% and above', '80% and above', '70% and above'];
-const PriceFilterOptions=['0-499','500-999','1000-1999','2000-3999','4000 & Above']
+const PriceFilterOptions = ['0-499', '500-999', '1000-1999', '2000-3999', '4000 & Above'];
 
 const leftItems = [
-  {'name':'Price','id':0},{'name':'Discount','id':1}]
+  { 'name': 'Price', 'id': 0 }, { 'name': 'Discount', 'id': 1 }, { 'name': 'Category', 'id': 2 }
+];
 
 const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
   const [selectedDiscountOptions, setSelectedDiscountOptions] = useState([]);
@@ -15,9 +16,20 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
 
   useEffect(() => {
     setSelectedDiscountOptions(propSelectedDiscountOptions || []);
-
-    console.log(selectedDiscountOptions)
+    console.log(selectedDiscountOptions);
   }, [propSelectedDiscountOptions]);
+
+  useEffect(() => {
+    const backAction = () => {
+      console.log("Back button pressed");
+      onClose();
+      return true; // Return true to prevent default behavior (exit the app)
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove(); // Cleanup the event listener
+  }, []);
 
   const handleCheckboxSelect = (option) => {
     setDiscountFilterChanged(true);
@@ -38,15 +50,10 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
       setDiscountFilterChanged(true);
     }
     setSelectedDiscountOptions([]);
-
   };
 
-  const handleApply = () => {  
-    onApply(
-      
-      selectedDiscountOptions
-    );
-
+  const handleApply = () => {
+    onApply(selectedDiscountOptions);
     onClose();
   };
 
@@ -54,73 +61,69 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
     onClose();
   };
 
+  const handleLeftItemClick = (item) => {
+    console.log('Selected item ID:', item.id);
+    setSelectedleftItemID(item.id);
+  };
+
   const renderLeftItem = ({ item }) => (
     <TouchableOpacity
-      style={{ flex: 1, padding:9, alignItems: 'center', justifyContent: 'center',
-      backgroundColor: selectedleftItemID === item.id ? '#f9f9f9' : 'transparent',
-      borderLeftWidth: selectedleftItemID === item.id ? 5 : 0,
-      borderLeftColor: selectedleftItemID === item.id ? '#D63C63' : 'transparent',
-      
-    }}
+      style={{
+        flex: 1, padding: 20, alignItems: 'center', justifyContent: 'center',
+        backgroundColor: selectedleftItemID === item.id ? '#f9f9f9' : 'transparent',
+        borderLeftWidth: selectedleftItemID === item.id ? 5 : 0,
+        borderLeftColor: selectedleftItemID === item.id ? '#D63C63' : 'transparent',
+      }}
+      onPress={() => handleLeftItemClick(item)}
     >
-     
-      <Text style={{ fontSize: 12, textAlign: 'center',fontWeight:"500" }}>{item.name}</Text>
+      <Text style={{ fontSize: 17, textAlign: 'center', fontWeight: 400 }}>{item.name}</Text>
     </TouchableOpacity>
   );
 
-  return (
-    <View style={{ flex: 1 ,paddingTop:20}}>
-      <View style={{ backgroundColor: '#fff', elevation: 3, height: 70, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 14 }}>FILTERS</Text>
-        </View>
-
-        <TouchableOpacity onPress={handleClearAll}>
-          <View style={{ marginRight: 16 }}>
-            <Text style={{ color: '#FF4081', fontSize: 14 }}>Clear All</Text>
-          </View>
-          
+  const renderDiscountFilters = () => {
+    return discountOptions.map((option) => (
+      <View key={option} style={{ marginBottom: 10 }}>
+        <TouchableOpacity
+          onPress={() => handleCheckboxSelect(option)}
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+        >
+          <CheckBox
+            value={selectedDiscountOptions.includes(option)}
+            onValueChange={() => handleCheckboxSelect(option)}
+            tintColors={{ true: '#FF4081', false: 'black' }}
+          />
+          <Text style={{ marginLeft: 15, fontSize: 17, marginBottom: 10,color:"#222" }}>{option}</Text>
         </TouchableOpacity>
       </View>
+    ));
+  };
 
-      <View style={{ flexDirection: 'row', flex: 1,backgroundColor:'#f9f9f9' }}>
-        <View style={{ flex: 2, backgroundColor: '#F2F2F2',height: '100%' }}>
-
-        <FlatList
-          data={leftItems}
-          keyExtractor={(item) => item.id}
-          renderItem={renderLeftItem}
-          numColumns={1}
-          style={{backgroundColor:'#E2E0E0'}}
-        />
-
-          
-        
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ backgroundColor: '#fff', elevation: 3, height: 70, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 17, fontWeight: 400 }}>FILTERS</Text>
         </View>
-
+        <TouchableOpacity onPress={handleClearAll}>
+          <View style={{ marginRight: 16 }}>
+            <Text style={{ color: '#FF4081', fontSize: 17, fontWeight: 400 }}>Clear All</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={{ flexDirection: 'row', flex: 1, backgroundColor: '#f9f9f9' }}>
+        <View style={{ flex: 2, backgroundColor: '#F2F2F2', height: '100%' }}>
+          <FlatList
+            data={leftItems}
+            keyExtractor={(item) => item.id.toString()} // Ensure the key is a string
+            renderItem={renderLeftItem}
+            numColumns={1}
+            style={{ backgroundColor: '#E2E0E0' }}
+          />
+        </View>
         <View style={styles.container}>
-          {discountOptions.map((option) => (
-            <View key={option} style={{ marginBottom: 10 }}>
-              <TouchableOpacity
-                onPress={() => handleCheckboxSelect(option)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-              >
-                <CheckBox
-                  value={selectedDiscountOptions.includes(option)}
-                  onValueChange={() => handleCheckboxSelect(option)}
-                  tintColors={{ true: '#FF4081', false: 'black' }} // Add this line
-
-                />
-                <Text style={{ marginLeft: 15,fontSize:19,marginBottom:10 }}>{option}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          {selectedleftItemID === 1 && renderDiscountFilters()}
         </View>
       </View>
-
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
         <TouchableOpacity
           style={{
@@ -137,7 +140,6 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
         >
           <Text style={{ color: 'white' }}>Apply</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={{
             flex: 1,
@@ -161,7 +163,7 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flex: 5,
+    flex: 3.2,
     height: '100%',
     marginRight: 10,
     overflow: 'hidden',

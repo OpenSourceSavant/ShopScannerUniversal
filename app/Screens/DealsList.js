@@ -1,5 +1,5 @@
   import React, { useState, useEffect, useRef } from 'react';
-  import { ScrollView, Text, TouchableOpacity, Image, View,TouchableWithoutFeedback,Modal,StyleSheet,Dimensions,Platform,RefreshControl} from 'react-native';
+  import { ScrollView, Text, TouchableOpacity, Image, View,TouchableWithoutFeedback,Modal,StyleSheet,Dimensions,Platform,RefreshControl,BackHandler} from 'react-native';
   import {db} from '../../firebaseConfig'; // Adjust the import according to your Firebase configuration file
   import amazonLogo from '..//..//assets/amazon_logo.png';
   import flipkartLogo from '..//..//assets/flipkart_logo.png';
@@ -21,9 +21,13 @@
   import TiraLogo from '..//..//assets/tira_logo.png';
   import VerifiedImage from '..//..//assets/verified.png';
   import downdiscount from '..//..//assets/downdiscount.png';
-  import FastImage from 'react-native-fast-image'
   import { StatusBar } from 'expo-status-bar';
+  
+if (Platform.OS === 'android' || Platform.OS === 'ios') {
+  FastImage = require('react-native-fast-image');
+}
 
+const { height: screenHeight } = Dimensions.get('window');
 
   const DealsList = () => {
 
@@ -38,13 +42,18 @@
     const [sortOptionChanged, setSortOptionChanged] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [filterScreenVisible, setIsFilterScreenVisible] = useState(false);
+
     const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
     const [selectedDiscountOptions, setSelectedDiscountOptions] = useState([]);
     const [filterChanged, setfilterChanged] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    
 
     const navigation = useNavigation();
     const windowHeight = Dimensions.get('window').height;
+
+    const translateY = useSharedValue(windowHeight);
+
 
 
     const showBottomSheet = () => setBottomSheetVisible(true);
@@ -75,6 +84,32 @@
       // Add more stores if needed
     };
 
+    useEffect(() => {
+      const backAction = () => {
+        console.log("Back button pressed");
+        handleBackPress();
+        return true; // Return true to prevent default behavior (exit the app)
+      };
+  
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+  
+      return () => backHandler.remove(); // Cleanup the event listener
+    }, []);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ translateY: translateY.value }],
+    }));
+
+    useEffect(() => {
+      if (filterScreenVisible) {
+        // Slide up animation
+        translateY.value = withSpring(10, { damping:15});
+      } else {
+        // Slide down animation
+        translateY.value = withSpring(screenHeight, { damping: 15 });
+      }
+    }, [filterScreenVisible]);
+
     const handleDealClick = async (url) => {
       try {
         await Linking.openURL(url);
@@ -92,7 +127,9 @@
       //router.replace(targetStack);
       const navigationParams = {
         pathname: targetStack,
+        params:{lastRoute:'DealsList'}
       };
+      
       
       if (lastRoute) {
         navigationParams.params = {
@@ -444,9 +481,9 @@
                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 60, elevation: 0, borderTopWidth: 0.9, borderTopColor: '#dfdfdf',backgroundColor:'#fff' }}>
               {/* Sort Button */}
               <TouchableWithoutFeedback onPress={showBottomSheet} style={{height:60}} >
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',height:60 }}>
-                  <FastImage source={require('../../assets/user.png')} style={{ width: 24, height: 24 }} />
-                  <Text style={{ fontWeight: '400', marginLeft: 5, color: '#0f0f0f',fontFamily:'Poppins-SemiBold' }}>Sort</Text>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <FastImage source={require('../../assets/user.png')} style={{ width: 18, height: 18 }} />
+                  <Text style={{ fontWeight: '400', marginLeft: 5, color: '#0f0f0f' }}>Sort</Text>
                 </View>
               </TouchableWithoutFeedback>
 
@@ -458,8 +495,8 @@
 
               <TouchableWithoutFeedback onPress={() => setIsFilterScreenVisible(true)} style={{height:60}}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                  <FastImage source={require('../../assets/filter.png')} style={{ width: 24, height: 24 }} />
-                  <Text style={{ fontWeight: '400', marginLeft: 5, color: '#000',fontFamily:'Poppins-SemiBold' }}>Filter</Text>
+                  <FastImage source={require('../../assets/filter.png')} style={{ width: 18, height: 18 }} />
+                  <Text style={{ fontWeight: '400', marginLeft: 5, color: '#0f0f0f' }}>Filter</Text>
                 </View>
               </TouchableWithoutFeedback>
 
@@ -508,16 +545,17 @@
           )}      
           
           {filterScreenVisible &&
-          <Modal
-            isVisible={filterScreenVisible}
-            animationType="slide"
-            style={{flex:1}}
+          <View
+            style={styles.overlay} 
             onBackdropPress={() => setIsFilterScreenVisible(false)}>
-            <View style={{flex:1,height:screenHeight}}>
-              <FilterScreen onClose={handleCloseFilterScreen} onApply={handleFilterApply}  propSelectedDiscountOptions={selectedDiscountOptions}
-/>
-            </View>
-          </Modal>
+            <Animated.View style={[styles.container, animatedStyle]}>
+                <FilterScreen
+                  onClose={handleCloseFilterScreen}
+                  onApply={handleFilterApply}
+                  propSelectedDiscountOptions={selectedDiscountOptions}
+                />
+            </Animated.View>
+          </View>
           }
           
           
@@ -543,6 +581,11 @@
   };
 
   const styles = StyleSheet.create({
+
+    overlay: {
+      ...StyleSheet.absoluteFillObject,
+    },
+  
     modalContainer: {
       flex: 1,
       justifyContent: 'flex-end',
@@ -574,6 +617,15 @@
     },
     radioButtonContainer: {
       marginTop: 10,
+    },
+
+    container: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: screenHeight,
+      backgroundColor: 'white',
     },
   });
 
