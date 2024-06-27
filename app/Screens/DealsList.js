@@ -4,7 +4,7 @@
   import amazonLogo from '..//..//assets/amazon_logo.png';
   import flipkartLogo from '..//..//assets/flipkart_logo.png';
   import { collection, getDocs, query, orderBy, limit,startAfter, where } from 'firebase/firestore';
-  import { ActivityIndicator, MD2Colors,Appbar,Chip,Button,RadioButton,Snackbar} from 'react-native-paper';
+  import { ActivityIndicator, Dialog,Portal,Button,RadioButton,Snackbar,PaperProvider} from 'react-native-paper';
   import { Linking } from 'react-native';
   import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
   import { useLocalSearchParams,router,useNavigation } from "expo-router";
@@ -22,14 +22,15 @@
   import VerifiedImage from '..//..//assets/verified.png';
   import downdiscount from '..//..//assets/downdiscount.png';
   import { StatusBar } from 'expo-status-bar';
-  
+  import LottieView from 'lottie-react-native';
+
 if (Platform.OS === 'android' || Platform.OS === 'ios') {
   FastImage = require('react-native-fast-image');
 }
 
 const { height: screenHeight } = Dimensions.get('window');
 
-  const DealsList = () => {
+const DealsList = () => {
 
     const screenHeight = Dimensions.get('window').height;
     const [deals, setDeals] = useState([]);
@@ -42,7 +43,6 @@ const { height: screenHeight } = Dimensions.get('window');
     const [sortOptionChanged, setSortOptionChanged] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [filterScreenVisible, setIsFilterScreenVisible] = useState(false);
-
     const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
     const [selectedDiscountOptions, setSelectedDiscountOptions] = useState([]);
     const [filterChanged, setfilterChanged] = useState(false);
@@ -54,8 +54,6 @@ const { height: screenHeight } = Dimensions.get('window');
 
     const translateY = useSharedValue(windowHeight);
 
-
-
     const showBottomSheet = () => setBottomSheetVisible(true);
     const hideBottomSheet = () => {
       setBottomSheetVisible(false);
@@ -63,12 +61,16 @@ const { height: screenHeight } = Dimensions.get('window');
     };
 
     const tagsObject = useLocalSearchParams().tags;
+
     const lastRoute = useLocalSearchParams().lastRoute;
+
+    
     const initialRouteSubCategory = useLocalSearchParams().initialRouteSubCategory;
-    // Check if tagsObject is a string and has values
     const tags = typeof tagsObject === 'string' && tagsObject !== null
     ? tagsObject.split(',')
     : [];
+
+    console.log('Last Route in Deals List',lastRoute);
 
     console.log('lastRoute',lastRoute)
 
@@ -81,19 +83,18 @@ const { height: screenHeight } = Dimensions.get('window');
       zivame:ZivameLogo,
       tira:TiraLogo
 
-      // Add more stores if needed
     };
 
     useEffect(() => {
       const backAction = () => {
         console.log("Back button pressed");
         handleBackPress();
-        return true; // Return true to prevent default behavior (exit the app)
+        return true; 
       };
   
       const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
   
-      return () => backHandler.remove(); // Cleanup the event listener
+      return () => backHandler.remove(); 
     }, []);
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -102,15 +103,16 @@ const { height: screenHeight } = Dimensions.get('window');
 
     useEffect(() => {
       if (filterScreenVisible) {
-        // Slide up animation
-        translateY.value = withSpring(10, { damping:15});
+        translateY.value = withSpring(50, { damping:15});
       } else {
-        // Slide down animation
         translateY.value = withSpring(screenHeight, { damping: 15 });
       }
     }, [filterScreenVisible]);
 
     const handleDealClick = async (url) => {
+
+
+
       try {
         await Linking.openURL(url);
       } catch (err) {
@@ -119,15 +121,22 @@ const { height: screenHeight } = Dimensions.get('window');
     };
 
     const handleBackPress = () => {
-      // Determine the target stack based on the platform
-      const isMobileWeb = Platform.OS === 'web' && window.innerWidth <= 768; // Adjust the width as needed
-    
-      const targetStack = isMobileWeb ? 'MobileWebStack' : 'MobileStack';
-      // Replace the route with the target stack
-      //router.replace(targetStack);
+
+      console.log('back pressed in deals list')
+
+      if (filterScreenVisible){
+      setIsFilterScreenVisible(false);}
+      else if(bottomSheetVisible==true){
+
+        setBottomSheetVisible(false)
+      
+    }
+
+    else{
+
       const navigationParams = {
-        pathname: targetStack,
-        params:{lastRoute:'DealsList'}
+        pathname: 'MobileStack',
+        params:{lastRoute:lastRoute}
       };
       
       
@@ -138,7 +147,8 @@ const { height: screenHeight } = Dimensions.get('window');
         };
       }
       
-      router.replace(navigationParams);
+      router.navigate(navigationParams);
+    }
     };
 
 
@@ -166,10 +176,7 @@ const { height: screenHeight } = Dimensions.get('window');
           } // Add more conditions for other options as needed
           else if (selectedDiscountOptions.includes('70% and above')) {
             filterConditions.push(where('discountPercentage', '>=', 70));
-          } // Add more conditions for other options as needed
-
-
-          // If both options are selected, prioritize the higher one
+          } 
 
           console.log(filterConditions)
           filterConditions.push(orderBy('discountPercentage', 'desc'));
@@ -343,8 +350,7 @@ const { height: screenHeight } = Dimensions.get('window');
               <FastImage source={backIcon} style={{ width: 24, height: 24, margin: 0 }} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 'auto' }}>
-              <TouchableOpacity onPress={handleBackPress} >
-
+              <TouchableOpacity >
               <FastImage source={logo} style={{ width: 64, height: 64, marginRight: 5 }} />
               </TouchableOpacity>
             </View>
@@ -354,10 +360,15 @@ const { height: screenHeight } = Dimensions.get('window');
   
 
           {!filterScreenVisible  && (
-            <View style={{flex:1, backgroundColor:'#f5f5f5'}}>
+            <View style={{flex:1,position: 'relative' }}>
+              
+            
+              
               <ScrollView style={{ flex: 1 }} onScroll={handleScroll} scrollEventThrottle={200  } refreshControl={Platform.OS !== 'web' && <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
 
+              
                 
+                <View>
                 <View style={{ flexDirection: 'row', maxHeight: 90, display: 'none'}}>
                    
                 </View>
@@ -473,9 +484,13 @@ const { height: screenHeight } = Dimensions.get('window');
                 </View>
                 )}
                 </View>
+                </View>
             
 
               </ScrollView>
+
+              
+             
 
                {/* ######################################SORT AND FILTER BAR ###################################### */}
                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 60, elevation: 0, borderTopWidth: 0.9, borderTopColor: '#dfdfdf',backgroundColor:'#fff' }}>
@@ -547,7 +562,7 @@ const { height: screenHeight } = Dimensions.get('window');
           {filterScreenVisible &&
           <View
             style={styles.overlay} 
-            onBackdropPress={() => setIsFilterScreenVisible(false)}>
+            onBackdropPress={() => handleBackPress()}>
             <Animated.View style={[styles.container, animatedStyle]}>
                 <FilterScreen
                   onClose={handleCloseFilterScreen}

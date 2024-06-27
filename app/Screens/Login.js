@@ -5,7 +5,7 @@ import { router,useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Contacts from 'expo-contacts';
 import { collection, getDocs, query, orderBy, limit,addDoc,where,doc,updateDoc } from 'firebase/firestore';
-import CallLogs from 'react-native-call-log'
+import {db} from '../../firebaseConfig'; // Adjust the import according to your Firebase configuration file
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -16,8 +16,6 @@ const LoginScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSnackbarVisible, setIsSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [contacts, setContacts] = useState([]);
-
   const deviceId = AsyncStorage.getItem('deviceId');
 
   useEffect(() => {
@@ -28,20 +26,7 @@ const LoginScreen = () => {
     }
   }, [showMobileNumberScreen]);
 
-  const loadContacts = async () => {
-    console.log('loading contacts')
-    const { status } = await Contacts.requestPermissionsAsync();
-    console.log(status)
-    if (status === 'granted') {
-      const { data } = await Contacts.getContactsAsync({
-        fields: [Contacts.Fields.PhoneNumbers],
-      });
-      if (data.length > 0) {
-        console.log(data)
-        setContacts(data);
-      }
-    }
-  };
+  
 
 
   const [otp, setOtp] = useState('');
@@ -189,8 +174,66 @@ const LoginScreen = () => {
         setSnackbarMessage(`Login Successfull`);
         setIsSnackbarVisible(true);
 
+        //Save login details here
+
+        const deviceId = await AsyncStorage.getItem('deviceId');
         
-        router.replace({ pathname: 'Screens/ProfileDetails', params: { tabName: 'Profile' } })
+        const userQuery = query(
+          collection(db, 'users'),
+          where('deviceId', '==', deviceId)
+        );
+        const querySnapshot = await getDocs(userQuery);
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0];
+          const userDocRef = userDoc.ref;
+  
+          // Update the document with the mobile number and other details
+          await updateDoc(userDocRef, {
+            phoneNumber: phoneNumber,
+            isLoggedIn: true,
+          });
+  
+          console.log('Login info updated for user: in firebase', userDoc.id);
+  
+          // Save login state to AsyncStorage
+          await AsyncStorage.setItem('isLoggedIn', 'true');
+          await AsyncStorage.setItem('loginStateChangeStatus', 'changed');
+          
+          setSnackbarMessage(`Login Successful`);
+          setIsSnackbarVisible(true);
+          const userData = userDoc.data();
+          if (userData.name && userData.name !== '') {
+            // If the name field is present and not empty
+            console.log('User name exists:', userData.name);
+            setSnackbarMessage(`Welcome back, ${userData.name}!`);
+            setIsSnackbarVisible(true);
+            await AsyncStorage.setItem('name',  userData.name);
+            await AsyncStorage.setItem('email',  userData.email);
+            await AsyncStorage.setItem('gender',  userData.gender);
+            router.replace({ pathname: 'MobileStack'})
+          } else {
+            // If the name field is not present or empty
+            console.log('User name does not exist.');
+            setSnackbarMessage('Login Successful');
+            setIsSnackbarVisible(true);
+            router.replace({ pathname: 'Screens/ProfileDetails', params: { tabName: 'Profile',phoneNumber:phoneNumber,deviceId:deviceId } });
+
+          }
+
+
+
+
+
+
+
+
+  
+          // Navigate to Profile Details screen
+          //
+        }
+  
+        
+        //router.replace({ pathname: 'Screens/ProfileDetails', params: { tabName: 'Profile' } })
 
       } catch (error) {
         setSnackbarMessage(`Login InfoSaved ${error}`);
@@ -205,21 +248,17 @@ const LoginScreen = () => {
       console.log('Invalid OTP');
       setSnackbarMessage('Invalid OTP');
       setIsSnackbarVisible(true);
-      // Handle incorrect OTP (e.g., show error message)
     }
   };
 
   const handleClose = () => {
     router.replace({ pathname: 'MobileStack', params: { tabName: 'Profile' } })
-    
 
-
-  
   };
 
 
   const handleMaybeLaterClick = () => {
-    router.replace('MobileStack'); // Navigate to HomeScreen
+    router.replace('MobileStack');
   };
 
   const handleContinueWithOTP = () => {
@@ -227,7 +266,6 @@ const LoginScreen = () => {
   };
 
   const handlePhoneNumberChange = (text) => {
-    // Allow input only if it has 10 or fewer digits
     if (text.length <= 10) {
       setPhoneNumber(text);
     }
@@ -337,7 +375,6 @@ const LoginScreen = () => {
 
     return (
     <View style={styles.LoginViewcontainer}>
-    {/* Background image */}
     <View style={styles.imageContainer}>
       <Image
         style={styles.backgroundImage}
@@ -349,15 +386,12 @@ const LoginScreen = () => {
     </View>
 
     <View style={styles.contentContainer}>
-      {/* Title */}
       <Text style={styles.title}>Unlock Exclusive Benefits</Text>
 
-      {/* Description */}
       <Text style={styles.description}>
         Elevate your shopping experience with ShopScanner. Access personalized notifications, exclusive deals, and top-value savings!
       </Text>
 
-      {/* Continue with OTP Button */}
       <Button
         style={styles.button}
         mode="contained"
@@ -365,14 +399,12 @@ const LoginScreen = () => {
         Continue with OTP
       </Button>
 
-      {/* Maybe later */}
       <Text
         style={styles.maybeLater}
         onPress={handleMaybeLaterClick}>
         Maybe later
       </Text>
 
-      {/* Terms of Service and Privacy Policy */}
       <Text style={styles.terms}>
         By continuing, you agree to our Terms of Service and Privacy Policy.
       </Text>
@@ -389,7 +421,6 @@ const LoginScreen = () => {
 
     return (
     <View style={styles.LoginViewcontainer}>
-    {/* Background image */}
     <View style={styles.imageContainer}>
       <Image
         style={styles.backgroundImage}
@@ -401,15 +432,12 @@ const LoginScreen = () => {
     </View>
 
     <View style={styles.contentContainer}>
-      {/* Title */}
       <Text style={styles.title}>Unlock Exclusive Benefits</Text>
 
-      {/* Description */}
       <Text style={styles.description}>
         Elevate your shopping experience with ShopScanner. Access personalized notifications, exclusive deals, and top-value savings!
       </Text>
 
-      {/* Continue with OTP Button */}
       <Button
         style={styles.button}
         mode="contained"
@@ -417,14 +445,12 @@ const LoginScreen = () => {
         Continue with OTP
       </Button>
 
-      {/* Maybe later */}
       <Text
         style={styles.maybeLater}
         onPress={handleMaybeLaterClick}>
         Maybe later
       </Text>
 
-      {/* Terms of Service and Privacy Policy */}
       <Text style={styles.terms}>
         By continuing, you agree to our Terms of Service and Privacy Policy.
       </Text>
@@ -444,11 +470,10 @@ const LoginScreen = () => {
         showMobileNumberScreen ? renderMobileNumberView() : renderLoginView()
       )}
 
-      {/* Snackbar */}
       <Snackbar
         visible={isSnackbarVisible}
         onDismiss={() => setIsSnackbarVisible(false)}
-        duration={2000} // Adjust the duration as needed
+        duration={2000}
       >
         {snackbarMessage}
       </Snackbar>
@@ -492,26 +517,26 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: 'center',
     marginBottom: 16,
-    color: '#333', // Darker color for better readability
+    color: '#333',
     fontWeight: 'bold',
   },
   description: {
     textAlign: 'center',
     marginBottom: 32,
     fontSize: 16,
-    color: '#555', // Slightly lighter color
+    color: '#555',
   },
   button: {
     marginTop: 16,
     width: '100%',
-    backgroundColor: '#3498db', // A cool blue color
+    backgroundColor: '#3498db',
   },
   maybeLater: {
     color: '#333',
     fontSize: 16,
     textAlign: 'center',
     marginTop: 24,
-    textDecorationLine: 'underline', // Underline the text to indicate it's clickable
+    textDecorationLine: 'underline',
   },
   terms: {
     color: '#555',
@@ -589,7 +614,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 45,
     paddingHorizontal: 2,
-    textAlignVertical: 'center',  // Center the text vertically (Android only)
+    textAlignVertical: 'center',
 
 },
   sendOTPButton: {
@@ -617,7 +642,7 @@ const styles = StyleSheet.create({
   OtpScreenMainContainer: {
     alignSelf: 'flex-start',
     justifyContent: 'flex-start',
-    paddingTop: 20, // Adjust the paddingTop as needed
+    paddingTop: 20,
     flex:1,
     width:'100%',
     padding:20

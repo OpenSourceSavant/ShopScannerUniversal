@@ -34,7 +34,7 @@ const PriceCards = () => {
   };
 
   return (
-    <View style={{backgroundColor:'#f5f5f5',marginTop:10}}>
+    <View style={{marginTop:10}}>
           <Text style={{   
             fontFamily: 'Poppins-SemiBold',
             marginTop:10,

@@ -1,19 +1,58 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import {db} from '../../firebaseConfig'; // Adjust the import according to your Firebase configuration file
+import { useLocalSearchParams,router } from "expo-router";
+import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileDetails = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [gender, setGender] = useState('');
 
+  const phoneNumber = useLocalSearchParams().phoneNumber;
+  const deviceId = useLocalSearchParams().deviceId;
+
   const handleGenderChange = (selectedGender) => {
     setGender(selectedGender);
   };
 
-  const handleSave = () => {
-    // Perform save action here
-    console.log(`Name: ${name}, Email: ${email}, Gender: ${gender}`);
+  const handleSave = async () => {
+    if (name && name !== '' && email && email !== '' && gender && gender !== '') {
+      try {
+        // Create a query to find the document with the matching deviceId and phoneNumber
+        const userQuery = query(
+          collection(db, 'users'),
+          where('deviceId', '==', deviceId),
+          where('phoneNumber', '==', phoneNumber)
+        );
+
+        const querySnapshot = await getDocs(userQuery);
+
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0];
+          const userDocRef = userDoc.ref;
+
+          // Update the document with the new details
+          await updateDoc(userDocRef, {
+            name: name,
+            email: email,
+            gender: gender,
+          });
+          await AsyncStorage.setItem('name', name);
+          await AsyncStorage.setItem('email', email);
+          await AsyncStorage.setItem('gender', gender);
+          console.log('Profile details updated for user:', userDoc.id);
+          // Navigate to another screen or show a success message
+          router.replace('MobileStack'); // Adjust the route as needed
+        } else {
+          console.log('No user found with this device ID and phone number.');
+        }
+      } catch (error) {
+        console.error('Error updating profile details:', error);
+      }
+    }
   };
 
   return (
@@ -24,14 +63,14 @@ const ProfileDetails = () => {
       </Text>
       <TextInput
         style={styles.input}
-        placeholder="Name"
+        placeholder="*Name"
         placeholderTextColor="#888"
         value={name}
         onChangeText={setName}
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="*Email"
         placeholderTextColor="#888"
         value={email}
         onChangeText={setEmail}
@@ -54,14 +93,6 @@ const ProfileDetails = () => {
             tintColors={{ true: '#e91e63', false: '#aaa' }}
           />
           <Text style={styles.checkboxLabel}>Female</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.checkboxContainer} onPress={() => handleGenderChange('other')}>
-          <CheckBox
-            value={gender === 'other'}
-            onValueChange={() => handleGenderChange('other')}
-            tintColors={{ true: '#e91e63', false: '#aaa' }}
-          />
-          <Text style={styles.checkboxLabel}>Other</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
@@ -97,7 +128,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     borderColor: '#e91e63',
-    borderRadius: 25,
+    borderRadius: 10,
     backgroundColor: '#f9f9f9',
     color: '#333',
   },

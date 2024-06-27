@@ -5,8 +5,12 @@ import CheckBox from '@react-native-community/checkbox';
 const discountOptions = ['90% and above', '80% and above', '70% and above'];
 const PriceFilterOptions = ['0-499', '500-999', '1000-1999', '2000-3999', '4000 & Above'];
 
+//const leftItemsNeedToChangeInNextRelease = [
+//  { 'name': 'Price', 'id': 0 }, { 'name': 'Discount', 'id': 1 }, { 'name': 'Category', 'id': 2 }
+//];
+
 const leftItems = [
-  { 'name': 'Price', 'id': 0 }, { 'name': 'Discount', 'id': 1 }, { 'name': 'Category', 'id': 2 }
+ { 'name': 'Discount', 'id': 1 }
 ];
 
 const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
@@ -124,7 +128,7 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
           {selectedleftItemID === 1 && renderDiscountFilters()}
         </View>
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10,marginBottom:40 }}>
         <TouchableOpacity
           style={{
             flex: 1,

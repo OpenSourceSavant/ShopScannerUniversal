@@ -8,7 +8,6 @@ import DealsList from './Screens/DealsList';
 import Profile from './Screens/Profile';
 import { useNavigation, useRoute } from '@react-navigation/native'; // Import useNavigation and useRoute
 import { useLocalSearchParams } from 'expo-router';
-import { Facebook } from 'react-content-loader'
 
 const Tab = createBottomTabNavigator();
 const Loader = () => {
@@ -86,11 +85,16 @@ const MobileStack = () => {
   //params received
   const selectedTabReference = useLocalSearchParams().tabName;
   const lastRoute = useLocalSearchParams().lastRoute;
+  const initialRouteSubCategory = useLocalSearchParams().initialRouteSubCategory;
+
+
 
  
 
 
-  console.log(lastRoute)
+  console.log('Last Route in Mobile Stack',lastRoute);
+  console.log('initialRouteSubCategory in Mobile Stack',initialRouteSubCategory)
+
 
 
   useEffect(() => {
@@ -99,6 +103,9 @@ const MobileStack = () => {
     if (selectedTabReference && ['Home', 'Categories', 'All Deals', 'Profile'].includes(selectedTabReference)) {
       console.log(selectedTabReference)
       setSelectedTab(selectedTabReference);
+    }
+    else if(lastRoute=='Categories'){
+      setSelectedTab('Categories');
     }
     else{
       console.log('Home')
@@ -162,6 +169,7 @@ const MobileStack = () => {
           <Tab.Screen
             name="Categories"
             component={AllCategories}
+            initialParams={{initialRouteSubCategory}}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <CustomTabIcon icon={require('..//assets/category.png')} color={color} size={size} />
@@ -185,9 +193,11 @@ const MobileStack = () => {
               tabPress: () => navigateToScreen('All Deals', { lastRoute: 'MobileStack' }),
             }}
           />
+          {/*
           <Tab.Screen
             name="Profile"
             component={Profile}
+            visible={false}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <CustomTabIcon icon={require('..//assets/user.png')} color={color} size={size} />
@@ -198,6 +208,8 @@ const MobileStack = () => {
               tabPress: () => navigateToScreen('Profile', { lastRoute: 'MobileStack' }),
             }}
           />
+          */}
+          
         </Tab.Navigator>
       )}
       
@@ -233,6 +245,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop:20,
     marginLeft:10,
+    borderRadius:10,
     marginRight:10
   },
 

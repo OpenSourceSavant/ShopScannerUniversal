@@ -12,23 +12,15 @@ if (Platform.OS === 'android' || Platform.OS === 'ios') {
 const screenWidth = Dimensions.get('window').width;
 
 const AllCategories = ({route} ) => {
-  console.log('Route object in All Categorie', route);
 
-  // Check the structure of the route object and see if params is present
-  const initialParams  = route.params ;
-  let initialRouteSubCategory;
 
-  if(initialParams){
-
-  initialRouteSubCategory = initialParams.initialRouteSubCategory;
-
+  const initialRouteSubCategory = route.params?.initialRouteSubCategory;
   console.log('initialRouteSubCategory in All Categories', initialRouteSubCategory);
-  }
 
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   
-    const subcategoryItemWidth = (screenWidth *0.9 ) / 3 - 20; // Adjust 20 for margins or padding
+  const subcategoryItemWidth = (screenWidth *0.9 ) / 3 - 20; 
   
   const categories   = [
     {

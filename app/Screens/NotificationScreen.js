@@ -1,68 +1,77 @@
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity,Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router'; // Import the router instance from 'expo-router'
-import { ActivityIndicator, Appbar } from 'react-native-paper';
-import FastImage from 'react-native-fast-image'; // Import FastImage
-import logo from '..//..//assets/icon.png';
-import notification from '..//..//assets/notification.png';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { Appbar } from 'react-native-paper';
+import { router } from 'expo-router'; 
 
-
-const notificationsData = [
-  { id: 1, message: 'Notification 1: Lorem ipsum dolor sit amet.' },
-  { id: 2, message: 'Notification 2: consectetur adipiscing elit.' },
-  { id: 3, message: 'Notification 3: Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
-  // Add more notifications as needed
-];
+const notificationsData = [];
 
 const NotificationScreen = () => {
-  const handleLeftPress = () => {
-    // Use the router instance to navigate back
-    router.back()
-  };
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <View>
-      {/* Custom App Bar */}
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <Appbar.Header style={styles.appbarHeader}>
+        <Appbar.BackAction onPress={() => router.back()} />
+        <Text style={styles.appbarTitle}>Notification</Text>
+        <View style={{ flex: 1 }}></View>
+      </Appbar.Header>
 
-      <Appbar.Header style={{ height: 40, marginTop: -15,backgroundColor:'#fff' }}>
-            <Image source={logo} style={{ width: 55, height: 55, marginLeft: 10 }} />
-            <View style={{ flex: 1 }}></View>
-           
-
-          </Appbar.Header>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 56,
-          backgroundColor: 'white',
-          borderBottomWidth: 1,
-          borderBottomColor: '#ddd',
-          paddingHorizontal: 16,
-        }}
-      >
-        <TouchableOpacity onPress={handleLeftPress}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Notifications</Text>
-        {/* Add your right press logic here */}
-      </View>
-
-      {/* Notifications List */}
-      <FlatList
-        data={notificationsData}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
-            <Text>{item.message}</Text>
+      <View style={styles.container}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <View style={styles.noNotificationsContainer}>
+            <Text style={styles.noNotificationsText}>No notifications</Text>
+            <Text style={styles.additionalText}>Your price drop and notifications will appear here</Text>
           </View>
         )}
-      />
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  appbarHeader: {
+    height: 40,
+    marginTop: -15,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  appbarTitle: {
+    fontSize: 20,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noNotificationsContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding:20,
+    flex:1
+    
+  },
+  noNotificationsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  additionalText: {
+    marginTop: 8,
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+  },
+});
 
 export default NotificationScreen;

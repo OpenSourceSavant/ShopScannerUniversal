@@ -2,7 +2,7 @@
   "expo": {
     "name": "Shop Scanner",
     "slug": "ShopScannerUniversal",
-    "version": "4.4.0",
+    "version": "4.6.0",
     "scheme": "shopscanner",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",

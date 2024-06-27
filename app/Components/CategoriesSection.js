@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Platform } from 'react
 import { useNavigation } from '@react-navigation/native';
 import top_categories_banner from '..//..//assets/top_categories_banner.png';
 import setupGoogleAnalytics from '../analytics';
+import { router } from 'expo-router';
 
 if (Platform.OS === 'android' ||Platform.OS === 'ios') {
   FastImage = require('react-native-fast-image');
@@ -11,8 +12,8 @@ const isAndroid = Platform.OS === 'android';
 let analytics;
 
 const categories = [
-  { id: '2', name: 'Hot', image: require('..//..//assets/latest.png'), tags: ["morethan60"] },
-  { id: '1', name: 'Latest', image: require('..//..//assets/hot.png'), tags: null },
+  { id: '2', name: 'Latest', image: require('..//..//assets/latest.png'),tags: null  },
+  { id: '1', name: 'Hot', image: require('..//..//assets/hot.png'),tags: ["morethan60"]  },
   { id: '8', name: 'Beauty', image: require('..//..//assets/beauty.png'), tags: [
       "beauty&personalcare", "shower gel", "menfragrance", "facewash", "sunscreen", "faceserum", 
       "moituriser", "haircare", "hairwash", "shampoo", "hairserum", "makeup", "perfumes", "perfume", 
@@ -44,7 +45,7 @@ const categories = [
 ];
 
 const handleCategoryClick = (category, navigation,_analytics) => {
-  console.log(category.tags);
+  console.log('Tags in category section', category.tags);
   if (analytics)
     {
       let category_name_for_logging;
@@ -52,8 +53,26 @@ const handleCategoryClick = (category, navigation,_analytics) => {
       console.log(category_name_for_logging)
       analytics.logEvent(category_name_for_logging)
     }
+
+    if (category.id==10){
+      router.replace({
+        pathname: 'MobileStack',
+        params: {
+          lastRoute: 'Categories',
+        }
+      });
+
+    }
+    else{
   
-  navigation.navigate('Screens/DealsList', { tags: category.tags,lastRoute:'HomeScreen' });
+    router.push({
+      pathname: 'Screens/DealsList',
+      params: {
+        tags: category.tags,
+        lastRoute: 'HomeScreen'
+      }
+    });
+  }
 };
 
 const CategoriesSection = () => {

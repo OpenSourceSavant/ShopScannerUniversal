@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Linking, Platform, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Linking, Platform, Image,StyleSheet} from 'react-native';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { LinearGradient } from 'expo-linear-gradient';
+
 import { db } from '../../firebaseConfig';
 
 import FlipkartLogo from '../../assets/flipkart_logo.png';
@@ -70,37 +72,31 @@ const ArrivedJustNow = () => {
   };
 
   const handleClick = async (url) => {
-    try {
+   
       console.log(url);
-      const supported = await Linking.canOpenURL(url);
-  
-      if (supported) {
+      
         await Linking.openURL(url);
-      } else {
-        console.error(`Unable to open URL: ${url}`);
-      }
-    } catch (err) {
-      console.error('Error handling URL:', err);
-    }
+    
   };
 
-  if (Platform.OS === 'web') {
-    FastImage = require('react-native-fast-image').default;
-  }
+
 
   return (
-    <View style={{paddingLeft:10,paddingTop:10,paddingBottom:10, backgroundColor:'#f5f5f5'}}>
-      <Text style={{ 
-        fontFamily: 'Poppins-SemiBold',
-        fontSize: 16,
-        paddingBottom: 5,
-        fontWeight: '700',
-        textAlign: 'left',
-        marginLeft:5,
-        marginBottom:10
-      }}>
-        ALL TIME SALE
-      </Text>
+    <View style={{paddingLeft:10,paddingTop:10, backgroundColor:'#fff'}}>
+      
+      <View style={styles.lineContainer}>
+            <LinearGradient
+                      colors={['#e0e0e0', '#000']}
+                      style={styles.line}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}/>
+            <Text style={styles.title}>ALL TIME SALE</Text>
+            <LinearGradient
+                        colors={['#000', '#e0e0e0']}
+                        style={styles.line}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}/>
+      </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <Image
@@ -183,5 +179,68 @@ const ArrivedJustNow = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+  },
+  scrollViewContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    height:267
+  },
+  logoContainer: {
+    marginRight: 10,
+    borderRadius: 10,
+    borderColor: '#ECB5CF',
+    height:240,
+    width:150,
+    borderWidth: 0.4,
+    overflow: 'hidden',
+    marginTop:25 // Ensure that the overflow is hidden to clip the LinearGradient
+  },
+  gradient: {
+    width: 150,
+    height: 240,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 110,
+    height: 80,
+    resizeMode: 'contain',
+  },
+  title: {
+    fontFamily: 'Roboto',
+    paddingBottom: 5,
+    paddingLeft:15,
+    paddingRight:15,
+    paddingTop:5,
+    fontWeight: '500',
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#e91e63', // Pink theme color
+    textTransform: 'uppercase', // Modern style
+    letterSpacing: 1.2, // Adds spacing between letters for a modern look
+    backgroundColor: 'rgba(233, 30, 99, 0.1)', // Light pink background to highlight the title
+    paddingVertical: 10, // Add vertical padding for better readability
+    borderRadius: 8, // Slightly rounded corners
+    overflow: 'hidden', // Ensure rounded corners are clipped
+  },  
+  lineContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom:20
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#000',
+    marginLeft:10,
+    marginRight:10
+    
+  },
+});
 
 export default ArrivedJustNow;

@@ -25,6 +25,7 @@ import { useLocalSearchParams,router } from 'expo-router';
 const viewsData = [
   { type: 'TopHomeCarousel' },
   { type: 'CategoriesSection' },
+  { type: 'ArrivedJustNow' },
   { type: 'ChooseByStore' },
   { type: 'BottomHomeCarousel' },
   { type: 'PercentageCardsList' },
@@ -119,7 +120,7 @@ const HomeScreen = ({ route }) => {
   };
 
   const navigateToSearchScreen = () => {
-    navigation.navigate('SearchScreen'); // Navigate to SearchScreen
+    router.push('Screens/SearchScreen'); // Navigate to SearchScreen
   };
 
   const handleItemClick = (type) => {
@@ -169,6 +170,7 @@ const HomeScreen = ({ route }) => {
       'TopHomeCarousel': <TopHomeCarousel  />,
       'CategoriesSection': <CategoriesSection  />,
       'ChooseByStore': <ChooseByStore  />,
+      'ArrivedJustNow': <ArrivedJustNow  />,
       'BottomHomeCarousel': <BottomHomeCarousel  />,
       'PercentageCardsList': <PercentageCardsList  />,
       'ValueStore': <ValueStore  />,

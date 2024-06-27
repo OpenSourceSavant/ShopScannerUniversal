@@ -1,14 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Dimensions, TouchableOpacity, Platform, StyleSheet } from 'react-native';
+import { View, ScrollView, Dimensions, TouchableOpacity, Platform, StyleSheet, Animated, Text, Image } from 'react-native';
 import { getDocs, query, collection, limit } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import { router } from 'expo-router';
-import { ActivityIndicator } from 'react-native-paper';
 
 let FastImage;
 if (Platform.OS === 'android' || Platform.OS === 'ios') {
   FastImage = require('react-native-fast-image');
 }
+
+const Loader = () => {
+  const translateX = new Animated.Value(-100); // Initial position of the loader
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(translateX, {
+          toValue: 500, 
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateX, {
+          toValue: -100, 
+          duration: 0,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [translateX]);
+
+  return (
+    <View style={styles.loaderRectangleContainer}>
+      <View style={styles.loaderRectangleLine}>
+        <Animated.View style={[styles.loaderBar, { transform: [{ translateX }] }]} />
+      </View>
+    </View>
+  );
+};
 
 const TopHomeCarousel = () => {
   const [carouselImages, setCarouselImages] = useState([]);
@@ -35,16 +63,16 @@ const TopHomeCarousel = () => {
 
   const handleCarouselClick = (Tags) => {
     console.log('Carousel clicked with tags:', Tags);
-    router.push({ pathname: 'Screens/DealsList', params: { tags: Tags,lastRoute:'HomeScreen' } });
+    router.push({ pathname: 'Screens/DealsList', params: { tags: Tags, lastRoute: 'HomeScreen' } });
   };
 
   return (
-    <View style={{ flex: 1, height: 230,backgroundColor:'#fff' }}>
+    <View style={{ flex: 1, height: 230, backgroundColor: '#fff' }}>
       <ScrollView
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        style={{ marginLeft:10,marginRight:10 }}
+        style={{ marginLeft: 10, marginRight: 10 }}
         contentContainerStyle={{ alignItems: 'center' }}
       >
         {carouselImages.length > 0 ? (
@@ -52,7 +80,7 @@ const TopHomeCarousel = () => {
             <TouchableOpacity
               key={index}
               onPress={() => handleCarouselClick(item.Tags)}
-              style={{ borderRadius:10 }}
+              style={{ borderRadius: 10 }}
             >
               <View style={styles.imageContainer}>
                 {(Platform.OS === 'android' || Platform.OS === 'ios') ? (
@@ -72,7 +100,9 @@ const TopHomeCarousel = () => {
             </TouchableOpacity>
           ))
         ) : (
-          <ActivityIndicator animating={true} size="large" />
+          <View>
+          <Loader />
+          </View>
         )}
       </ScrollView>
     </View>
@@ -82,14 +112,35 @@ const TopHomeCarousel = () => {
 const styles = StyleSheet.create({
   imageContainer: {
     borderRadius: 10,
-    overflow: 'hidden',
     
   },
   image: {
-    width: Dimensions.get('window').width-20,
+    width: Dimensions.get('window').width - 20,
     height: 230,
     borderRadius: 10,
-    
+  },
+  loaderRectangleContainer: {
+    height: 230,
+    width:Dimensions.get('window').width-20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    borderRadius:10
+  },
+  loaderRectangleLine: {
+    width: '100%',
+    height: 230,
+    backgroundColor: '#d3d3d3',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  loaderBar: {
+    height: '100%',
+    width: 500,
+    backgroundColor: '#cfcfd0',
+    position: 'absolute',
+    left: 0,
+    top: 0,
   },
 });
 

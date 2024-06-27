@@ -25,7 +25,10 @@ const Splash = () => {
         const isFirstTimeUser = await AsyncStorage.getItem('isFirstTimeUser');
         if (isFirstTimeUser === null || isFirstTimeUser === 'true') {
           // First time user logic
-          navigation.replace('Screens/Intro');  // Navigate to intro screen
+          //navigation.replace('Screens/Intro');  // Navigate to intro screen
+
+          //this we will change in next release
+          router.replace({ pathname: 'MobileStack', params: { lastRoute: 'Splash' } });
         } else {
           // Not a first-time user, proceed with normal flow
           router.replace({ pathname: 'MobileStack', params: { lastRoute: 'Splash' } });
