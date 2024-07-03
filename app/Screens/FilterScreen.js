@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler,Dimensions } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
 const discountOptions = ['90% and above', '80% and above', '70% and above'];
@@ -13,10 +13,15 @@ const leftItems = [
  { 'name': 'Discount', 'id': 1 }
 ];
 
-const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
+const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions,tabbed }) => {
   const [selectedDiscountOptions, setSelectedDiscountOptions] = useState([]);
   const [discountFilterChanged, setDiscountFilterChanged] = useState(false);
   const [selectedleftItemID, setSelectedleftItemID] = useState(0);
+
+  
+
+  const screenFlex = tabbed ? 0.87 : 1;
+
 
   useEffect(() => {
     setSelectedDiscountOptions(propSelectedDiscountOptions || []);
@@ -103,7 +108,7 @@ const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: screenFlex }}>
       <View style={{ backgroundColor: '#fff', elevation: 3, height: 70, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 17, fontWeight: 400 }}>FILTERS</Text>

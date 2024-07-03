@@ -10,6 +10,8 @@ PODS:
     - ExpoModulesCore
   - EXConstants (15.4.5):
     - ExpoModulesCore
+  - EXContacts (12.8.2):
+    - ExpoModulesCore
   - EXFont (11.10.3):
     - ExpoModulesCore
   - EXJSONUtils (0.12.3)
@@ -105,6 +107,8 @@ PODS:
     - React-NativeModulesApple
     - React-RCTAppDelegate
     - ReactCommon/turbomodule/core
+  - ExpoStoreReview (6.8.3):
+    - ExpoModulesCore
   - ExpoSystemUI (2.9.3):
     - ExpoModulesCore
   - ExpoTrackingTransparency (3.3.0):
@@ -225,6 +229,12 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
+  - lottie-ios (4.3.4)
+  - lottie-react-native (6.5.1):
+    - glog
+    - lottie-ios (~> 4.3.3)
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - Mixpanel-swift (4.2.0):
     - Mixpanel-swift/Complete (= 4.2.0)
   - Mixpanel-swift/Complete (4.2.0)
@@ -1314,6 +1324,8 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - RNSVG (15.3.0):
+    - React-Core
   - RNVexoAnalytics (1.3.13):
     - React-Core
   - SDWebImage (5.11.1):
@@ -1332,6 +1344,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXApplication (from `../node_modules/expo-application/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
+  - EXContacts (from `../node_modules/expo-contacts/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
   - EXManifests (from `../node_modules/expo-manifests/ios`)
@@ -1348,6 +1361,7 @@ DEPENDENCIES:
   - ExpoLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - ExpoLocalization (from `../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoStoreReview (from `../node_modules/expo-store-review/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - ExpoTrackingTransparency (from `../node_modules/expo-tracking-transparency/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
@@ -1357,6 +1371,7 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - MixpanelReactNative (from `../node_modules/mixpanel-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -1414,6 +1429,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - RNVexoAnalytics (from `../node_modules/vexo-analytics`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1430,6 +1446,7 @@ SPEC REPOS:
     - GoogleUtilities
     - libevent
     - libwebp
+    - lottie-ios
     - Mixpanel-swift
     - nanopb
     - PromisesObjC
@@ -1450,6 +1467,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-application/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
+  EXContacts:
+    :path: "../node_modules/expo-contacts/ios"
   EXFont:
     :path: "../node_modules/expo-font/ios"
   EXJSONUtils:
@@ -1482,6 +1501,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-localization/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoStoreReview:
+    :path: "../node_modules/expo-store-review/ios"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
   ExpoTrackingTransparency:
@@ -1499,6 +1520,8 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2023-11-17-RNv0.73.0-21043a3fc062be445e56a2c10ecd8be028dd9cc5
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   MixpanelReactNative:
     :path: "../node_modules/mixpanel-react-native"
   RCT-Folly:
@@ -1609,6 +1632,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   RNVexoAnalytics:
     :path: "../node_modules/vexo-analytics"
   Yoga:
@@ -1622,6 +1647,7 @@ SPEC CHECKSUMS:
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   EXApplication: 137189a3f149b4e8e546884629392c3efc94cbd3
   EXConstants: 988aa430ca0f76b43cd46b66e7fae3287f9cc2fc
+  EXContacts: 5fcab84e1f1a562934e688d422117f9a33169c37
   EXFont: f20669cb266ef48b004f1eb1f2b20db96cd1df9f
   EXJSONUtils: 5c42959e87be238b045ef37cc5268b16a6c0ad4a
   EXManifests: 5e8c29f36c716af768a4ea47ec05e1b89ab93091
@@ -1638,6 +1664,7 @@ SPEC CHECKSUMS:
   ExpoLinearGradient: 4ad1449a2408e0435ac959076562b3921f2e32a1
   ExpoLocalization: f5f5d71dc0c9514d3d77b2771144f6fed6398d04
   ExpoModulesCore: 1391529545de72f7f64ecabc7adb912306ab4d34
+  ExpoStoreReview: 3911cdf5a416230a421af41f93e763595bd7a681
   ExpoSystemUI: 40e222dd9d52222fe1bce389724ac52e662158dc
   ExpoTrackingTransparency: bbae3e495bc58c79b9430cfbc217a56c2ddc9354
   EXSplashScreen: 39244885abfb1b12765aae89edb90f8c88db6bbd
@@ -1656,6 +1683,8 @@ SPEC CHECKSUMS:
   hermes-engine: b2669ce35fc4ac14f523b307aff8896799829fe2
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  lottie-ios: 3d98679b41fa6fd6aff2352b3953dbd3df8a397e
+  lottie-react-native: c1c6a1fd86e1942d69c2bc2e14212be72b55f3be
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 9e83f45fdcb6c2d83e97226d2dff79a780f882b4
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
@@ -1714,6 +1743,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 25b969a1ffc806b9f9ad2e170d4a3b049c6af85e
   RNReanimated: 6259d9f32f4a54b2f5660bc2c1829215e38ca20f
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
+  RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
   RNVexoAnalytics: b754995fbba372e8cfe914da58af9053f0aeec2a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

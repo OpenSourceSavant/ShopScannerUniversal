@@ -62,7 +62,7 @@ const Splash = () => {
         await analyticsInstance.logEvent('ios_app_open');
         await analyticsInstance.setAnalyticsCollectionEnabled(true);
 
-        navigateToRespectiveStack(analytics); // Pass googleAnalytics directly
+       
 
       } else {
         // Handle tracking permission denied

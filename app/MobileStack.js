@@ -86,6 +86,7 @@ const MobileStack = () => {
   const selectedTabReference = useLocalSearchParams().tabName;
   const lastRoute = useLocalSearchParams().lastRoute;
   const initialRouteSubCategory = useLocalSearchParams().initialRouteSubCategory;
+  const tabbed = 'tabbed'
 
 
 
@@ -183,6 +184,7 @@ const MobileStack = () => {
           <Tab.Screen
             name="All Deals"
             component={DealsList}
+            initialParams={{tabbed}}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <CustomTabIcon icon={require('..//assets/all_icon.png')} color={color} size={size} />

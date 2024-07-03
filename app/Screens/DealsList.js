@@ -30,7 +30,7 @@ if (Platform.OS === 'android' || Platform.OS === 'ios') {
 
 const { height: screenHeight } = Dimensions.get('window');
 
-const DealsList = () => {
+const DealsList = ({route}) => {
 
     const screenHeight = Dimensions.get('window').height;
     const [deals, setDeals] = useState([]);
@@ -51,6 +51,9 @@ const DealsList = () => {
 
     const navigation = useNavigation();
     const windowHeight = Dimensions.get('window').height;
+    
+    const tabbed = route?.params?.tabbed;
+    console.log(tabbed)
 
     const translateY = useSharedValue(windowHeight);
 
@@ -103,7 +106,12 @@ const DealsList = () => {
 
     useEffect(() => {
       if (filterScreenVisible) {
-        translateY.value = withSpring(50, { damping:15});
+        if (tabbed){
+        translateY.value = withSpring(150, { damping:15});
+        }
+        else{
+          translateY.value = withSpring(70, { damping:15});
+        }
       } else {
         translateY.value = withSpring(screenHeight, { damping: 15 });
       }
@@ -130,6 +138,7 @@ const DealsList = () => {
 
         setBottomSheetVisible(false)
       
+
     }
 
     else{
@@ -346,9 +355,12 @@ const DealsList = () => {
         <StatusBar backgroundColor='#fff' />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', elevation: 3, height: 70 }}>
-            <TouchableOpacity onPress={handleBackPress} style={{ padding: 10 }}>
-              <FastImage source={backIcon} style={{ width: 24, height: 24, margin: 0 }} />
-            </TouchableOpacity>
+        {tabbed === undefined && (
+  <TouchableOpacity onPress={handleBackPress} style={{ padding: 10 }}>
+    <FastImage source={backIcon} style={{ width: 24, height: 24, margin: 0 }} />
+  </TouchableOpacity>
+)}
+
             <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 'auto' }}>
               <TouchableOpacity >
               <FastImage source={logo} style={{ width: 64, height: 64, marginRight: 5 }} />
@@ -568,6 +580,7 @@ const DealsList = () => {
                   onClose={handleCloseFilterScreen}
                   onApply={handleFilterApply}
                   propSelectedDiscountOptions={selectedDiscountOptions}
+                  tabbed={tabbed}
                 />
             </Animated.View>
           </View>
