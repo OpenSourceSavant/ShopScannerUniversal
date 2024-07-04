@@ -16,7 +16,7 @@ const leftItems = [
 const FilterScreen = ({ onClose, onApply, propSelectedDiscountOptions,tabbed }) => {
   const [selectedDiscountOptions, setSelectedDiscountOptions] = useState([]);
   const [discountFilterChanged, setDiscountFilterChanged] = useState(false);
-  const [selectedleftItemID, setSelectedleftItemID] = useState(0);
+  const [selectedleftItemID, setSelectedleftItemID] = useState(1);
 
   
 
