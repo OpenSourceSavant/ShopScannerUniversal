@@ -3,14 +3,125 @@ import { ScrollView, View, Image, StyleSheet, Platform } from 'react-native';
 import { Card, Title } from 'react-native-paper';
 import { router } from 'expo-router';
 import setupGoogleAnalytics from '../analytics';
+import FastImage from 'react-native-fast-image';
 
 const isAndroid = Platform.OS === 'android';
 
-if (Platform.OS === 'android' ||Platform.OS === 'ios') {
-  FastImage = require('react-native-fast-image');
-}
+const cardsData1 = [
+  {
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-09%20(1).png?alt=media&token=847953b0-2fe6-4297-a3c6-b73be0616a2d",
+    tags: [
+      "beauty",
+      "beauty & personal care",
+      "facewash",
+      "sunscreen",
+      "face serum",
+      "faceserum",
+      "serum",
+      "moisturizer",
+      "moituriser",
+      "hair care",
+      "hairwash",
+      "shampoo",
+      "hairserum",
+      "makeup",
+      "perfumes",
+      "perfume",
+      "fragrance",
+      "deo",
+    ],
+  },
+  {
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-12%20(1).png?alt=media&token=51a43316-7273-43c8-8ae0-6548c7c288cb",
+    tags: [
+      "footwear",
+      "casual shoes",
+      "casualshoes",
+      "sports shoes",
+      "sportsshoes",
+      "formal shoes",
+      "formalshoes",
+      "flip flops",
+      "flipflops",
+      "heels",
+    ],
+  },
+  {
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-11%20(1).png?alt=media&token=dc56ca71-3815-4c50-99dd-13be3a04e1f1",
+    tags: [
+      "beauty",
+      "beauty & personal care",
+      "facewash",
+      "sunscreen",
+      "face serum",
+      "faceserum",
+      "serum",
+      "moisturizer",
+      "moituriser",
+      "hair care",
+      "hairwash",
+      "shampoo",
+      "hairserum",
+      "makeup",
+      "perfumes",
+      "perfume",
+      "fragrance",
+      "deo",
+      "women's fashion",
+      "shirts & t-shirts",
+      "womenshirt",
+      "womentshirt",
+      "womenshirts",
+      "jeans & trousers",
+      "womenjeans",
+      "womentrouser",
+      "women ethnic wear",
+      "womenethnicwear",
+      "sarees",
+      "saree",
+      "lehenga",
+      "winter wear",
+      "womenwinterwear",
+      "watches",
+      "womenwatch",
+      "smartwatch",
+      "accessories",
+      "womenaccessories",
+      "backpack",
+      "bags",
+      "men's fashion",
+      "shirts & t-shirts",
+      "menshirt",
+      "mentshirt",
+      "t-shirt",
+      "jeans & trousers",
+      "men jeans",
+      "men's jeans",
+      "ethnic wear",
+      "menethnicwear",
+      "winter wear",
+      "menwinterwear",
+      "watches",
+      "menwatch",
+      "smartwatch",
+      "accessories",
+      "menaccessories",
+      "backpack",
+      "bags",
+    ],
+  },
+  {
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/smartsaver-ace3e.appspot.com/o/sample%202-10%20(1).png?alt=media&token=0bbd9921-a2a1-4e13-bb17-edc89cf39a1b",
+    tags: ["haircare", "hair care", "hairwash", "shampoo", "hairserum"],
+  },
+];
 
-const ScrollableCards1 = ({ cardsData }) => {
+
+const ScrollableCards1 = () => {
 
   let analytics;
 
@@ -43,13 +154,9 @@ const ScrollableCards1 = ({ cardsData }) => {
         style={{ padding: 16 }}
         showsHorizontalScrollIndicator={false}
       >
-        {cardsData.map((card, index) => (
+        {cardsData1.map((card, index) => (
           <Card key={index} style={{ marginRight: 16 }} onPress={() => handleCardClick(card.tags)}>
-            {((isAndroid || Platform.OS === 'ios') && !Platform.OS === 'web') ? (
               <FastImage source={{ uri: card.image }} style={{ height: 150, width: 170, borderRadius: 8, resizeMode: 'contain' }} />
-            ) : (
-              <Card.Cover source={{ uri: card.image }} style={{ height: 150, width: 170, borderRadius: 8, resizeMode: 'contain' }} />
-            )}
           </Card>
         ))}
       </ScrollView>

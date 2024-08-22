@@ -87,7 +87,6 @@ const MobileStack = () => {
   const tabbed = 'tabbed'
 
 
-
   useEffect(() => {
 
 
@@ -120,6 +119,8 @@ const MobileStack = () => {
 
   return (
     <>
+      {selectedTab==null && (<Loader/>)}
+      {selectedTab !== null && (
         <Tab.Navigator
           screenOptions={{
             tabBarActiveTintColor: '#e91e63',
@@ -201,7 +202,7 @@ const MobileStack = () => {
           */}
           
         </Tab.Navigator>
-      
+      )}
       
       <Modal
         animationType="slide"

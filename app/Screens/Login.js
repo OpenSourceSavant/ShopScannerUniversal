@@ -3,7 +3,6 @@ import { View, Image, Text,StyleSheet,TouchableOpacity,ActivityIndicator } from 
 import { Button,IconButton,TextInput,Snackbar  } from 'react-native-paper';
 import { router,useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Contacts from 'expo-contacts';
 import { collection, getDocs, query, orderBy, limit,addDoc,where,doc,updateDoc } from 'firebase/firestore';
 import {db} from '../../firebaseConfig'; // Adjust the import according to your Firebase configuration file
 
@@ -22,7 +21,6 @@ const LoginScreen = () => {
     
     if (showMobileNumberScreen) {
       
-      //loadContacts();
     }
   }, [showMobileNumberScreen]);
 

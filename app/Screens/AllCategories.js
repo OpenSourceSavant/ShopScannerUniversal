@@ -41,7 +41,7 @@ const AllCategories = ({route} ) => {
     { 
       id: '2', 
       name: 'Men\'s Fashion', 
-      image: require('..//..//assets/menfashion.png'), // Replace 'gadgets.png' with your actual image file
+      image: require('..//..//assets/menfashion.png'),
       subcategories: [
         { id: '201', name: 'Shirts & T-Shirts', image: require('..//..//assets/shirts.png'), tags: ['menshirt','mentshirt','t-shirt','shirts&t-shirts'] },
         { id: '202', name: 'Jeans & Trousers', image: require('..//..//assets/jeans.png'), tags: ['menjeans', 'men\'sjeans','jeans&trousers'] },
@@ -120,7 +120,8 @@ const AllCategories = ({route} ) => {
       subcategories: [
         { id: '601', name: 'Oral Care', image: require('..//..//assets/oralcare.png'), tags: ['oralcare','oral care','toothbrush'] },
         { id: '602', name: 'Sexual Wellness', image: require('..//..//assets/sexualwellness.png'), tags: ['sexualwellness', 'condoms'] },
-      
+        { id: '603', name: 'Fitness', image: require('..//..//assets/sexualwellness.png'), tags: ['sexualwellness', 'condoms'] },
+
       ],
       
     },
