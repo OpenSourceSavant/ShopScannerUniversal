@@ -9,8 +9,6 @@ import * as Device from 'expo-device';
 import * as Application from 'expo-application';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import { registerLocationTask, unregisterLocationTask } from './backgroundFetch';
-
 
 
 
@@ -41,14 +39,10 @@ const Splash = () => {
     initApp();
   }, []);
 
-
-
   const requestTrackingPermission = async () => {
     if (Platform.OS === 'ios') {
       const { requestTrackingPermissionsAsync } = await import('expo-tracking-transparency');
-      const { status } = await requestTra
-      
-    ckingPermissionsAsync();
+      const { status } = await requestTrackingPermissionsAsync();
       if (status === 'granted') {
         const { firebase } = await import('@react-native-firebase/analytics');
         const analytics = firebase.analytics();

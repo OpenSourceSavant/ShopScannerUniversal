@@ -12,7 +12,12 @@
           "package_name": "com.shopscanner.dreamwave"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "986649847528-2hm05ulvh42bck3cri45i1t1lt6893ur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBOUoYafolQOzlZ4gI4yEgdULGoT4EEaE4"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986649847528-2hm05ulvh42bck3cri45i1t1lt6893ur.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "986649847528-ck9a8h28vj2fpi1lp5uvr0lpgk85k33p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shopscanner.dreamwave"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,20 @@
           "package_name": "com.shopscanner.wave"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "986649847528-onnttcsoea94behrl9dr9cjdn7gjggj6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shopscanner.wave",
+            "certificate_hash": "34dd8bc7b2ede4526c664a60aaff27083c258f8e"
+          }
+        },
+        {
+          "client_id": "986649847528-2hm05ulvh42bck3cri45i1t1lt6893ur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBOUoYafolQOzlZ4gI4yEgdULGoT4EEaE4"
@@ -39,7 +69,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986649847528-2hm05ulvh42bck3cri45i1t1lt6893ur.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "986649847528-ck9a8h28vj2fpi1lp5uvr0lpgk85k33p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shopscanner.dreamwave"
+              }
+            }
+          ]
         }
       }
     }

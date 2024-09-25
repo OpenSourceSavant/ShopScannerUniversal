@@ -63,7 +63,7 @@ const TopHomeCarousel = () => {
 
   const handleCarouselClick = (Tags) => {
     console.log('Carousel clicked with tags:', Tags);
-    router.push({ pathname: 'Screens/DealsList', params: { tags: Tags, lastRoute: 'HomeScreen' } });
+    router.push({ pathname: 'Screens/DealsList', params: { tags: Tags, lastRoute: 'HomeScreen',yRef:50 } });
   };
 
   return (

@@ -23,7 +23,7 @@ const PhoneNumberInputScreen = () => {
           <Button
             title="Submit OTP"
             onPress={handleOtpSubmit}
-            disabled={otp.length !== 4}
+            disabled={otp.length !== 6}
           />
         </View>
       ) : (

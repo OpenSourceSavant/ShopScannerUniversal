@@ -5,8 +5,7 @@ import {
   TouchableOpacity,
   Image,
   View,
-  TouchableWithoutFeedback,
-  Modal,
+
   StyleSheet,
   Dimensions,
   Platform,
@@ -14,8 +13,7 @@ import {
   BackHandler,
 } from "react-native";
 import { db } from "../../firebaseConfig"; // Adjust the import according to your Firebase configuration file
-import amazonLogo from "..//..//assets/amazon_logo.png";
-import flipkartLogo from "..//..//assets/flipkart_logo.png";
+
 import {
   collection,
   getDocs,
@@ -27,12 +25,8 @@ import {
 } from "firebase/firestore";
 import {
   ActivityIndicator,
-  Dialog,
-  Portal,
-  Button,
-  RadioButton,
+
   Snackbar,
-  PaperProvider,
 } from "react-native-paper";
 import { Linking } from "react-native";
 import Animated, {
@@ -42,11 +36,9 @@ import Animated, {
 } from "react-native-reanimated";
 import {
   useLocalSearchParams,
-  router,
   useNavigation,
   useRouter,
 } from "expo-router";
-import { debounce } from "lodash";
 import FilterScreen from "./FilterScreen";
 import backIcon from "..//..//assets/left-arrow.png"; // Replace with the correct path
 import logo from "..//..//assets/icon.png"; // Replace with the correct path
@@ -102,6 +94,8 @@ const DealsList = ({ route }) => {
 
   const lastRoute = useLocalSearchParams().lastRoute;
 
+  const yRef = useLocalSearchParams().yRef;
+
   const initialRouteSubCategory =
     useLocalSearchParams().initialRouteSubCategory;
   const tags =
@@ -154,18 +148,21 @@ const DealsList = ({ route }) => {
     } else {
       const navigationParams = {
         pathname: "MobileStack",
-        params: { lastRoute: lastRoute },
+        params: { 
+          lastRoute: lastRoute,
+          yRef:yRef
+        },
       };
 
       if (lastRoute) {
         navigationParams.params = {
           lastRoute: lastRoute,
           initialRouteSubCategory: initialRouteSubCategory,
+          yRef:yRef
         };
       }
 
-      //router.navigate(navigationParams);
-      router.back();
+      router.navigate(navigationParams);
     }
   };
 

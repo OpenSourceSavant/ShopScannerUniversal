@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Modal, Image, TouchableOpacity,View,Animated,StyleSheet } from 'react-native';
-import HomeScreen from './Screens/HomeScreen';
-import AllCategories from './Screens/AllCategories';
-import NotificationScreen from './Screens/NotificationScreen';
-import DealsList from './Screens/DealsList';
-import Profile from './Screens/Profile';
-import { useNavigation, useRoute } from '@react-navigation/native'; // Import useNavigation and useRoute
-import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState, useRef } from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  Modal,
+  Image,
+  TouchableOpacity,
+  View,
+  Animated,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import HomeScreen from "./Screens/HomeScreen";
+import AllCategories from "./Screens/AllCategories";
+import NotificationScreen from "./Screens/NotificationScreen";
+import DealsList from "./Screens/DealsList";
+import Profile from "./Screens/Profile";
+import { useNavigation, useRoute } from "@react-navigation/native"; // Import useNavigation and useRoute
+import { useLocalSearchParams } from "expo-router";
 
 const Tab = createBottomTabNavigator();
 const Loader = () => {
@@ -33,33 +41,43 @@ const Loader = () => {
   return (
     <View style={styles.loaderRectangleContainer}>
       <View style={styles.loaderRectangleLine}>
-        <Animated.View style={[styles.loaderBar, { transform: [{ translateX }] }]} />
+        <Animated.View
+          style={[styles.loaderBar, { transform: [{ translateX }] }]}
+        />
       </View>
       <View style={styles.loaderLineContainer}>
         <View style={styles.loaderLine} />
-        <Animated.View style={[styles.loaderBar, { transform: [{ translateX }] }]} />
+        <Animated.View
+          style={[styles.loaderBar, { transform: [{ translateX }] }]}
+        />
       </View>
       <View style={styles.loaderLineContainer}>
         <View style={styles.loaderLine} />
-        <Animated.View style={[styles.loaderBar, { transform: [{ translateX }] }]} />
+        <Animated.View
+          style={[styles.loaderBar, { transform: [{ translateX }] }]}
+        />
       </View>
       <View style={styles.loaderLineContainer}>
         <View style={styles.loaderLine} />
-        <Animated.View style={[styles.loaderBar, { transform: [{ translateX }] }]} />
+        <Animated.View
+          style={[styles.loaderBar, { transform: [{ translateX }] }]}
+        />
       </View>
       <View style={styles.loaderLineContainer}>
         <View style={styles.loaderLine} />
-        <Animated.View style={[styles.loaderBar, { transform: [{ translateX }] }]} />
+        <Animated.View
+          style={[styles.loaderBar, { transform: [{ translateX }] }]}
+        />
       </View>
       <View style={styles.loaderLineContainer}>
         <View style={styles.loaderLine} />
-        <Animated.View style={[styles.loaderBar, { transform: [{ translateX }] }]} />
+        <Animated.View
+          style={[styles.loaderBar, { transform: [{ translateX }] }]}
+        />
       </View>
     </View>
   );
 };
-
-
 
 const CustomTabIcon = ({ icon, color, size }) => {
   return (
@@ -77,34 +95,39 @@ const CustomTabIcon = ({ icon, color, size }) => {
 const MobileStack = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [isNotificationModalVisible, setNotificationModalVisible] = useState(false);
+  const [isNotificationModalVisible, setNotificationModalVisible] =
+    useState(false);
   const [selectedTab, setSelectedTab] = useState(null);
 
   //params received
   const selectedTabReference = useLocalSearchParams().tabName;
   const lastRoute = useLocalSearchParams().lastRoute;
-  const initialRouteSubCategory = useLocalSearchParams().initialRouteSubCategory;
-  const tabbed = 'tabbed'
+  const initialRouteSubCategory =
+    useLocalSearchParams().initialRouteSubCategory;
+  const yRef = useLocalSearchParams().yRef;
 
-
+  const tabbed = "tabbed";
 
   useEffect(() => {
+    console.log("Y Ref ", yRef);
 
-
-    if (selectedTabReference && ['Home', 'Categories', 'All Deals', 'Profile'].includes(selectedTabReference)) {
-      console.log(selectedTabReference)
+    if (
+      selectedTabReference &&
+      ["Home", "Categories", "All Deals", "Profile"].includes(
+        selectedTabReference
+      )
+    ) {
+      console.log(selectedTabReference);
       setSelectedTab(selectedTabReference);
+    } else if (lastRoute == "Categories") {
+      setSelectedTab("Categories");
+    } else {
+      console.log("Home");
+      setSelectedTab("Home");
     }
-    else if(lastRoute=='Categories'){
-      setSelectedTab('Categories');
-    }
-    else{
-      console.log('Home')
-      setSelectedTab('Home');
-    }
-  }, [selectedTabReference,selectedTab]);
 
- 
+  
+  }, [selectedTabReference, selectedTab]);
 
   const handleNotificationPress = () => {
     setNotificationModalVisible(true);
@@ -120,13 +143,17 @@ const MobileStack = () => {
 
   return (
     <>
+
         <Tab.Navigator
           screenOptions={{
-            tabBarActiveTintColor: '#e91e63',
+            tabBarActiveTintColor: "#e91e63",
             headerRight: () => (
-              <TouchableOpacity onPress={handleNotificationPress} style={{ marginRight: 16 }}>
+              <TouchableOpacity
+                onPress={handleNotificationPress}
+                style={{ marginRight: 16 }}
+              >
                 <Image
-                  source={require('..//assets/notification.png')}
+                  source={require("..//assets/notification.png")}
                   style={{
                     width: 28,
                     height: 28,
@@ -135,55 +162,68 @@ const MobileStack = () => {
                 />
               </TouchableOpacity>
             ),
-            headerTitle: '',
+            headerTitle: "",
           }}
           initialRouteName={selectedTab}
-        
         >
           <Tab.Screen
             name="Home"
             component={HomeScreen}
-            initialParams={{lastRoute}}
+            initialParams={{ lastRoute,yRef }}
             options={{
               tabBarIcon: ({ color, size }) => (
-                <CustomTabIcon icon={require('..//assets/homeicon.png')} color={color} size={size} />
+                <CustomTabIcon
+                  icon={require("..//assets/homeicon.png")}
+                  color={color}
+                  size={size}
+                />
               ),
               headerShown: false,
-              
             }}
             listeners={{
-              tabPress: () => navigateToScreen('Home', { lastRoute: 'MobileStack' }),
+              tabPress: () =>
+                navigateToScreen("Home", { lastRoute: "MobileStack" }),
             }}
           />
           <Tab.Screen
             name="Categories"
             component={AllCategories}
-            initialParams={{initialRouteSubCategory}}
+            initialParams={{ initialRouteSubCategory }}
             options={{
               tabBarIcon: ({ color, size }) => (
-                <CustomTabIcon icon={require('..//assets/category.png')} color={color} size={size} />
+                <CustomTabIcon
+                  icon={require("..//assets/category.png")}
+                  color={color}
+                  size={size}
+                />
               ),
               headerShown: false,
             }}
             listeners={{
-              tabPress: () => navigateToScreen('Categories', { lastRoute: 'MobileStack' }),
+              tabPress: () =>
+                navigateToScreen("Categories", { lastRoute: "MobileStack" }),
             }}
           />
           <Tab.Screen
             name="All Deals"
             component={DealsList}
-            initialParams={{tabbed}}
+            initialParams={{ tabbed }}
             options={{
               tabBarIcon: ({ color, size }) => (
-                <CustomTabIcon icon={require('..//assets/all_icon.png')} color={color} size={size} />
+                <CustomTabIcon
+                  icon={require("..//assets/all_icon.png")}
+                  color={color}
+                  size={size}
+                />
               ),
               headerShown: false,
             }}
             listeners={{
-              tabPress: () => navigateToScreen('All Deals', { lastRoute: 'MobileStack' }),
+              tabPress: () =>
+                navigateToScreen("All Deals", { lastRoute: "MobileStack" }),
             }}
           />
-          {/*
+          
           <Tab.Screen
             name="Profile"
             component={Profile}
@@ -198,11 +238,16 @@ const MobileStack = () => {
               tabPress: () => navigateToScreen('Profile', { lastRoute: 'MobileStack' }),
             }}
           />
-          */}
+          
+
+
+
+
+
+
           
         </Tab.Navigator>
-      
-      
+
       <Modal
         animationType="slide"
         transparent={false}
@@ -213,8 +258,6 @@ const MobileStack = () => {
       </Modal>
     </>
   );
-
- 
 };
 
 const styles = StyleSheet.create({
@@ -225,41 +268,40 @@ const styles = StyleSheet.create({
     height: 60,
     width: 90,
     borderRadius: 30,
-    backgroundColor: '#f0f0f0',
-    overflow: 'hidden',
+    backgroundColor: "#f0f0f0",
+    overflow: "hidden",
     marginBottom: 20,
   },
 
   loaderRectangleContainer: {
     marginBottom: 50,
-    overflow: 'hidden',
-    marginTop:20,
-    marginLeft:10,
-    borderRadius:10,
-    marginRight:10
+    overflow: "hidden",
+    marginTop: 20,
+    marginLeft: 10,
+    borderRadius: 10,
+    marginRight: 10,
   },
-
 
   loaderLineContainer: {
     marginBottom: 50,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   loaderLine: {
     height: 50,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
     borderRadius: 4,
   },
 
   loaderRectangleLine: {
     height: 200,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
     borderRadius: 10,
   },
   loaderBar: {
-    height: '100%',
-    width: '100%',
-    backgroundColor: '#e0e0e0',
-    position: 'absolute',
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#e0e0e0",
+    position: "absolute",
     left: 0,
     top: 0,
   },

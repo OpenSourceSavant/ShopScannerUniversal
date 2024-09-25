@@ -65,8 +65,14 @@ const HomeScreen = ({ route }) => {
   const flatListRef = useRef(null);
   const navigation = useNavigation();
   const { lastRoute } = route.params;
+  const { yRef } = route.params; // Receive yRef from MobileStack
+  
 
   useEffect(() => {
+
+
+    console.log('Y Ref in Home ',yRef);
+
     if (lastRoute === "Splash") {
       setIsLoading(true);
       const timer = setTimeout(() => {
@@ -109,14 +115,21 @@ const HomeScreen = ({ route }) => {
     return () => clearInterval(intervalId);
   }, [opacityAnimation]);
 
-  useEffect(() => {
-    if (flatListRef.current && initialScrollIndex !== null) {
-      flatListRef.current.scrollToIndex({
-        index: initialScrollIndex,
+
+  
+
+  const handleLayout = () => {
+    if (flatListRef.current && yRef !== null) {
+      flatListRef.current.scrollToOffset({
+        offset: yRef,
         animated: false,
       });
     }
-  }, [initialScrollIndex]);
+  };
+  
+
+
+
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -258,8 +271,7 @@ const HomeScreen = ({ route }) => {
                 />
               )
             }
-            initialScrollIndex={initialScrollIndex}
-            viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+            onLayout={handleLayout}
             style={{ backgroundColor: "#fff" }}
           />
         </View>

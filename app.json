@@ -2,7 +2,7 @@
   "expo": {
     "name": "Shop Scanner",
     "slug": "ShopScannerUniversal",
-    "version": "5.3.0",
+    "version": "6.0.0",
     "scheme": "shopscanner",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
@@ -15,14 +15,21 @@
       "bundleIdentifier": "com.shopscanner.wave",
       "googleServicesFile":"./GoogleService-Info.plist"
      
+     
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/ic_launcher_foreground.png",
         "backgroundColor": "#ffffff"
       },
+     
       "package": "com.shopscanner.wave",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleSignIn": {
+          "certificateHash": "34:DD:8B:C7:B2:ED:E4:52:6C:66:4A:60:AA:FF:27:08:3C:25:8F:8E"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -58,7 +65,8 @@
         "vibration": true 
        
       }
-    ]
+    ],
+    "@react-native-google-signin/google-signin"
     
     ],
     "extra": {

@@ -1,10 +1,5 @@
 <resources>
   <string name="app_name">Shop Scanner</string>
-  <string name="expo_splash_screen_resize_mode" translatable="false">cover</string>
-  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
   <string name="expo_system_ui_user_interface_style" translatable="false">light</string>
-  <string name="facebook_app_id">380808854883389</string>
-  <string name="fb_login_protocol_scheme">fb1234</string>
-  <string name="facebook_client_token">f465053129ed8a2605b174752a7f4e43</string>
   <string name="ExpoLocalization_supportsRTL" translatable="false">undefined</string>
 </resources>
